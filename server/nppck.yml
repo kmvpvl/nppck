@@ -1,0 +1,162 @@
+openapi: '3.0.2'
+info:
+  title: NPPC-KANBAN TOOL
+  version: '0.0.1'
+servers:
+  - url: '{protocol}://{environment}{server}:{port}/{version}'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      environment:
+        enum:
+          - test
+          - ''
+          - prod
+        default: '' 
+      port:
+        default: '3000'
+      version:
+        default: 'v0'
+
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        fullname:
+          type: string
+    worcenter:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id of workcenter
+        workcenters:
+          type: array
+          items:
+            $ref: "#/components/schemas/worcenter"
+    road:
+      description: Road between workcenters
+      type: object
+      properties:
+        id: 
+          type: string
+          description: Unique id of road
+        name: 
+          type: string
+        fullname:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        bidirect:
+          type: boolean
+        capacity:
+          type: number
+    factory:
+      type: object
+      required:
+        - "id"
+        - "name"
+      properties:
+        id:
+          type: string
+          description: Unique id of the Factory
+        name:
+          type: string
+          description: Short name of factory
+        fullname:
+          type: string
+          description: Full name of factory
+        map:
+          type: object
+        workcenters: 
+          type: array
+          items:
+            $ref: "#/components/schemas/worcenter"
+        roads:
+          type: array
+          items:
+            $ref: "#/components/schemas/road"
+    order:
+      type: object
+      properties:
+        property:
+          type: integer
+    role:
+      type: object
+      properties:
+        property:
+          type: integer
+    roles:
+      type: object
+      properties:
+        property:
+          type: integer
+    tag:
+      type: object
+      properties:
+        property:
+          type: integer
+    user:
+      type: object
+      properties:
+        property:
+          type: integer
+    message:
+      type: object
+      properties:
+        property:
+          type: integer
+    route:
+      type: object
+      properties:
+        property:
+          type: integer
+  responses:
+    FactoryNotFound:
+      description: ''
+      content:
+        application/json:
+          schema: {}
+    Unauthorized:
+      description: ''
+      content:
+        application/json:
+          schema: {}
+    
+  parameters:
+    factoryid:
+      name: factoryid
+      schema: 
+        type: string
+      in: path
+      required: true
+      description: 'Unique id of factory'
+  
+paths:
+  /factory/{factoryid}:
+    get:
+      operationId: factory
+      description: 'Returns information about factory'
+      parameters: 
+        - $ref: "#/components/parameters/factoryid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/factory"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '404':
+          $ref: "#/components/responses/FactoryNotFound"
