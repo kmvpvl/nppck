@@ -1,0 +1,11 @@
+{
+  "body": {
+    "content": "",
+    "file": false,
+    "fileSize": false
+  },
+  "headers": {},
+  "method": "GET",
+  "title": "getFactoryInfo",
+  "url": "http://localhost:8000/factory/62b8a8e097e44f4e43268aba"
+}

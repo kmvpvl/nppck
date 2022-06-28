@@ -1,0 +1,33 @@
+.multidate-container-full {
+    border: 1px dotted gray;
+    display: inline-flex;
+    flex-direction: column;
+    max-width: max-content;
+    padding: 0.2em;
+}
+.multidate-container-superbrief {
+    border: 0;
+    display: inline-block;
+    max-width: max-content;
+    padding: 0.2em;
+}
+
+.multidate-title {
+    font-size: large;
+    display: inline-block;
+    max-width: max-content;
+}
+
+.multidate-subtitle {
+    font-size: small;
+    display: inline-block;
+    max-width: max-content;
+}
+.multidate-datepoint {
+    font-size:medium;
+    display: inline-block;
+    max-width: max-content;
+}
+.multidate-datepoint-label {
+    font-size: xx-small;
+}
