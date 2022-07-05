@@ -1,0 +1,51 @@
+.order-container {
+    border: 1px dotteda gray;
+    display: grid;
+    grid-template-areas: 
+    "order-number   order-number    order-contract order-promise"
+    "order-priority order-customer  order-contract order-promise"
+    "order-products order-products  order-products order-products";
+    grid-template-columns: auto auto auto auto;
+    max-width: max-content;
+    padding: 2px;
+    margin: 2px;
+}
+
+.order-products {
+    grid-area: order-products;
+    display: grid;
+    grid-auto-rows: auto;
+    grid-template-columns: auto auto 1fr auto auto auto;
+    gap: 2px;
+    font-size: smaller;
+}
+
+.order-products > span {
+    border-right: 1px dotted gray;
+    border-top: 1px dotted gray;
+    padding: 1px;
+}
+
+.order-customer {
+    grid-area: order-customer;
+}
+.order-priority {
+    grid-area: order-priority;
+}
+
+.order-number {
+    font-size: x-large;
+    font-weight: bold;
+    grid-area: order-number;
+}
+.order-contract {
+    grid-area: order-contract;
+}
+.order-promise {
+    grid-area: order-promise;
+}
+
+.order-product-header {
+    font-weight: bold;
+    text-align: center;
+}

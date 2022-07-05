@@ -141,6 +141,13 @@ components:
       in: path
       required: true
       description: 'Unique id of factory'
+    orderid:
+      name: orderid
+      schema: 
+        type: string
+      in: path
+      required: true
+      description: "Unique id of order"
   
 paths:
   /factory/{factoryid}:
@@ -149,6 +156,23 @@ paths:
       description: 'Returns information about factory'
       parameters: 
         - $ref: "#/components/parameters/factoryid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/factory"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '404':
+          $ref: "#/components/responses/FactoryNotFound"
+  /order/{orderid}:
+    get:
+      operationId: order
+      description: 'Returns information about order'
+      parameters:
+        - $ref: "#/components/parameters/orderid"
       responses:
         '200':
           description: OK

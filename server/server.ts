@@ -2,6 +2,7 @@ import OpenAPIBackend from 'openapi-backend';
 import express, { Application, Request, Response } from "express";
 import morgan from "morgan";
 import NPPCKAPI from './api';
+import cors from 'cors';
 
 const PORT = process.env.PORT || 8000;
 
@@ -20,6 +21,16 @@ api.register({
             return res.status(404).json((e as Error).message);    
         }
     },
+
+    order: async (c, req, res) => {
+        try {
+            const r = await NPPCKAPI.order(c, req, res);
+            return res.status(200).json(r);
+        }
+        catch(e) {
+            return res.status(404).json((e as Error).message);    
+        }
+    },
     validationFail: (c, req, res) => res.status(400).json({ err: c.validation.errors }),
     notFound: (c, req, res) => res.status(404).json({ err: 'not found' }),
     postResponseHandler: (c, req, res) => {
@@ -31,6 +42,7 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(morgan('tiny'));
+app.use(cors());
 
 // use as express middleware
 app.use((req: Request, res: Response) => api.handleRequest({
