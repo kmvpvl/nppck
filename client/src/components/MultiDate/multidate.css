@@ -1,12 +1,12 @@
 .multidate-container-full {
-    border: 1px dotted gray;
+    border: var(--element-border-style);
     display: inline-flex;
     flex-direction: column;
     max-width: max-content;
     padding: 0.2em;
 }
 .multidate-container-brief {
-    border: 1px dotted gray;
+    border: var(--element-border-style);
     display: inline-grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
@@ -65,13 +65,19 @@
 }
 .multidate-dateselector-prev {
     text-align: right;
-    -webkit-mask-image: linear-gradient(90deg, transparent 2em, black 10em);
-    color: gray;
+    -webkit-mask-image: linear-gradient(90deg, transparent 2em, var(--active-on-hover-color) 10em);
+    color: var(--hide-as-option-color);
+}
+.multidate-dateselector-prev:hover {
+    text-align: right;
+    color: var(--active-on-hover-color);
+    cursor: pointer;
+    -webkit-mask-image:none;
 }
 
 .multidate-dateselector-next {
-    -webkit-mask-image: linear-gradient(-90deg, transparent 2em, black 10em);
-    color: gray;
+    -webkit-mask-image: linear-gradient(-90deg, transparent 2em, var(--active-on-hover-color) 10em);
+    color: var(--hide-as-option-color);
 }
 
 

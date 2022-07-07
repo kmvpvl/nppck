@@ -1,13 +1,16 @@
 import React, { Component, ReactNode } from "react";
-import MultiDate, {IMultiDate, MULTIDATE_EXTERIOR_FULL, MULTIDATE_EXTERIOR_SUPER_BRIEF} from '../MultiDate/multidate';
+import MultiDate, {IMultiDate, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from '../MultiDate/multidate';
 import MLString from "../MLString";
 import "./order.css";
+
+const strContract = new MLString("Contract", new Map([["ru-ru", "Дата договора"]]));
+const strPromise = new MLString("Promise", new Map([["ru-ru", "Дата обещания"]]));
 
 export interface IProduct {
     id?: string;
     mdmCode: string;
-    name: string | MLString;
-    fullname?: string | MLString;
+    name: MLString;
+    fullname?: MLString;
 }
 export interface IAmount {}
 export interface IPriority {
@@ -39,6 +42,7 @@ export interface  IOrder {
     precedors?: Array<string>;
     planning_mode?: string;
     products: Array<IOrderPos>;
+    lang?: string;
 }
 export class IOrder {
 
@@ -53,7 +57,7 @@ export default class Order extends Component<IOrder> {
             <React.Fragment key={ind}>
             <span>{ind+1}</span>
             <span>{p.product.mdmCode}</span>
-            <span>{p.product.name as string}</span>
+            <span>{p.product.name}</span>
             <span>{p.count}</span>
             <span>{p.measurement as string}</span>
             <MultiDate {...p.contractDate}/>
@@ -63,8 +67,8 @@ export default class Order extends Component<IOrder> {
         return (
             <span className="order-container">
                 <span className="order-number">#{pp.number}</span>
-                <span className="order-contract"><MultiDate {...pp.contractDate}/></span>
-                <span className="order-promise"><MultiDate {...pp.contractDate}/></span>
+                <span className="order-contract"><MultiDate title={strContract} estimated={pp.contractDate.estimated} state={MULTIDATE_EXTERIOR_BRIEF} lang={pp.lang}/></span>
+                <span className="order-promise"><MultiDate title={strPromise} estimated={pp.contractDate.estimated} state={MULTIDATE_EXTERIOR_BRIEF} lang={pp.lang}/></span>
                 <span className="order-priority">{pp.priority.customer+pp.priority.manufacture}</span>
                 <span className="order-customer">RNFT Worldwide LLC</span>
                 <span className="order-products">

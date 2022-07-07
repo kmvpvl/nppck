@@ -2,7 +2,11 @@ import { Component } from "react";
 import MLString from "../MLString";
 import "./multidate.css";
 
-interface IDateTolerance {
+const strEst = new MLString("Estimated", new Map([["ru-ru", "Ожидаемый"]]));
+const strBL = new MLString("Baseline", new Map([["ru-ru", "ПоПлану"]]));
+
+
+export interface IDateTolerance {
   datepoint: Date;
   left?: number;
   right?: number;
@@ -18,12 +22,12 @@ interface IMultiDateExterior {
     showTime: boolean;
 }
 
-export const MULTIDATE_EXTERIOR_SUPER_BRIEF: IMultiDateExterior = {
+export const MULTIDATE_EXTERIOR_SUPERBRIEF: IMultiDateExterior = {
   style: "superbrief",
   showTitle: false,
   showSubtitle: false,
   showTolerance: false,
-  showEstimated: false,
+  showEstimated: true,
   showBaseline: false,
   showTime: false
 }
@@ -33,7 +37,7 @@ export const MULTIDATE_EXTERIOR_BRIEF: IMultiDateExterior = {
   showTitle: true,
   showSubtitle: false,
   showTolerance: false,
-  showEstimated: false,
+  showEstimated: true,
   showBaseline: false,
   showTime: false
 }
@@ -48,61 +52,69 @@ export const MULTIDATE_EXTERIOR_FULL: IMultiDateExterior = {
   showTime: true
 }
 export interface IMultiDate {
-  title: MLString | string;
-  subtitle?: string;
+  title: MLString;
+  subtitle?: MLString;
   estimated: IDateTolerance
-  baseline?: Array<IDateTolerance>;
-  exterior?: IMultiDateExterior;
+  baseline?: Map<string, IDateTolerance>;
+  state?: IMultiDateExterior;
+  lang?: string;
 }
 
+class MLComponent extends Component<{}, {}> {
 
+}
 
-class MultiDate extends Component<IMultiDate> {
+class MultiDate extends Component<IMultiDate, IMultiDateExterior> {
+    constructor(props: any) {
+      super(props);
+      if (props.state) {
+        this.state = props.state;
+      } else {
+        this.state = MULTIDATE_EXTERIOR_SUPERBRIEF;
+      }
+    }
     getDateToView(): IDateTolerance {
       let d: IDateTolerance = {datepoint: new Date()};
       if (this.props.baseline) {
 
       }
-      if (this.props.exterior?.showEstimated) d = this.props.estimated;
+      if (this.state.showEstimated) d = this.props.estimated;
       return d;
     }
     getDateTimeString(d?: IDateTolerance):string {
       if (!d) d = this.getDateToView();
-      return this.props.exterior?.showTime?d.datepoint.toLocaleString():d.datepoint.toLocaleDateString();
+      return this.state.showTime?d.datepoint.toLocaleString():d.datepoint.toLocaleDateString();
     }
     getToleranceString(d?: IDateTolerance): string {
       if (!d) d = this.getDateToView();
-      return this.props.exterior?.showTolerance?"+"+d.right+";-"+d.left:"";
+      return this.state.showTolerance?"+"+d.right+";-"+d.left:"";
     }
     render() {
       let p = this.props;
-      const blselector = p.baseline?.map((bl, ind)=>
+      let s = this.state;
+      const blselector = p.baseline?.forEach((bl, ind)=>
         <span key={ind}>Baseline#{ind}</span>
       );
-      const bls = this.props.baseline?.map((bl, ind)=>
-        <span className="multidate-datepoint" key={ind}><span className="multidate-datepoint-label">BL{ind}</span>{p.exterior?.showTime?bl.datepoint.toLocaleString():bl.datepoint.toLocaleDateString()}<span>+{bl.right};-{bl.left}</span></span>
+      const bls = this.props.baseline?.forEach((bl, ind)=>
+        <span className="multidate-datepoint" key={ind}><span className="multidate-datepoint-label">BL{ind}</span>{s.showTime?bl.datepoint.toLocaleString():bl.datepoint.toLocaleDateString()}<span>+{bl.right};-{bl.left}</span></span>
       );
-      switch (p.exterior?.style) {
+      switch (s.style) {
       case 'superbrief':
         return (
-          <span className={"multidate-container-"+p.exterior?.style}>
-            {p.exterior?.showTitle?(<span className="multidate-title">{("string" == typeof p.title )? (p.title as string):""}</span>):""}
-            {p.exterior?.showSubtitle?(<span className="multidate-subtitle">{p.subtitle}</span>):""}
-            {p.exterior?.showEstimated?(<span className="multidate-datepoint"><span className="multidate-datepoint-label">EST</span>{p.exterior.showTime?p.estimated.datepoint.toLocaleString():p.estimated.datepoint.toLocaleDateString()}<span className="multidate-tolerance">+{p.estimated.right};-{p.estimated.left}</span></span>):""}
-            {p.exterior?.showBaseline?bls:""}
+          <span className={"multidate-container-"+s.style}>
+            <div className="multidate-dateselected">{this.getDateTimeString()}<span className="multidate-tolerance">{this.getToleranceString()}</span></div>
           </span>
         );
       case 'brief':
       default:
-
         return (
-          <div className={"multidate-container-"+p.exterior?.style}>
-            <div className="multidate-title">{("string" == typeof p.title )? (p.title as string):""}
+          <div className={"multidate-container-"+s.style}>
+            <div className="multidate-title">{p.title.toString(p.lang)}
               <span className="multidate-expandinfo">↕</span>
             </div>
             <div className="multidate-dateselected">{this.getDateTimeString()}<span className="multidate-tolerance">{this.getToleranceString()}</span></div>
             <div className="multidate-dateselector">
-              <span className="multidate-dateselector-prev">Estimated</span>
+              <span className="multidate-dateselector-prev">{strEst.toString(p.lang)}</span>
               <span className="multidate-dateselector-cur">Baseline#0</span>
               <span className="multidate-dateselector-next">Baseline#1</span>
             </div>

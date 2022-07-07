@@ -1,5 +1,5 @@
 .order-container {
-    border: 1px dotteda gray;
+    border: var(--element-border-style);
     display: grid;
     grid-template-areas: 
     "order-number   order-number    order-contract order-promise"
@@ -21,8 +21,8 @@
 }
 
 .order-products > span {
-    border-right: 1px dotted gray;
-    border-top: 1px dotted gray;
+    border-right: var(--element-border-style);
+    border-top: var(--element-border-style);
     padding: 1px;
 }
 

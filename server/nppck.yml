@@ -23,6 +23,51 @@ servers:
 
 components:
   schemas:
+    tool:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id of Tool
+          # to be extended
+    material:
+      type: object
+      properties:
+        id: 
+          type: string
+          # to be extended
+    operation:
+      type: object
+      properties:
+        id: 
+          type: string
+        name:
+          type: string
+        fullname:
+          type: string
+        consistsof:
+          type: array
+          items:
+            $ref: "#/components/schemas/material"
+        auxiliary:
+          type: array
+          items:
+            $ref: "#/components/schemas/material"
+        tools:
+          type: array
+          items:
+            $ref: "#/components/schemas/tool" 
+        cost: 
+          type: number
+        duration:
+          type: number
+        multiplication:
+          type: number
+        result:
+          type: array
+          items:
+            $ref: "#/components/schemas/material"
+            count: number
     product:
       type: object
       properties:
@@ -38,10 +83,18 @@ components:
         id:
           type: string
           description: Unique id of workcenter
+        name:
+          type: string
+        fullname:
+          type: string
         workcenters:
           type: array
           items:
             $ref: "#/components/schemas/worcenter"
+        operations:
+          type: array
+          items:
+            $ref: "#/components/schemas/operation"
     road:
       description: Road between workcenters
       type: object
