@@ -1,5 +1,15 @@
+* {
+  box-sizing: border-box;
+}
 .App {
   border: 1px solid green;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 2px;
+  min-width: 100%;
+  min-height: 100%;
+  position: fixed;
+  padding: 2px;
 }
 
 .App-logo {

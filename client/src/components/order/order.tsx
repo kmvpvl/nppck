@@ -1,10 +1,11 @@
 import React, { Component, ReactNode } from "react";
-import MultiDate, {IMultiDate, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from '../MultiDate/multidate';
-import MLString from "../MLString";
+import MultiDate, {IMultiDate, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from '../multidate/multidate';
+import MLString from "../mlstring";
 import "./order.css";
 
 const strContract = new MLString("Contract", new Map([["ru-ru", "Дата договора"]]));
 const strPromise = new MLString("Promise", new Map([["ru-ru", "Дата обещания"]]));
+const strContractSubtitle = new MLString("Due date by agreement", new Map([["ru-ru", "Дата в соответствии с договором"]]));
 
 export interface IProduct {
     id?: string;
@@ -63,11 +64,17 @@ export default class Order extends Component<IOrder> {
             <MultiDate {...p.contractDate}/>
             </React.Fragment>
         );
-                
+
         return (
             <span className="order-container">
                 <span className="order-number">#{pp.number}</span>
-                <span className="order-contract"><MultiDate title={strContract} estimated={pp.contractDate.estimated} state={MULTIDATE_EXTERIOR_BRIEF} lang={pp.lang}/></span>
+                <span className="order-contract">
+                    <MultiDate title={strContract} 
+                    estimated={pp.contractDate.estimated} 
+                    state={MULTIDATE_EXTERIOR_BRIEF} 
+                    lang={pp.lang} 
+                    subtitle={strContractSubtitle}/>
+                </span>
                 <span className="order-promise"><MultiDate title={strPromise} estimated={pp.contractDate.estimated} state={MULTIDATE_EXTERIOR_BRIEF} lang={pp.lang}/></span>
                 <span className="order-priority">{pp.priority.customer+pp.priority.manufacture}</span>
                 <span className="order-customer">RNFT Worldwide LLC</span>

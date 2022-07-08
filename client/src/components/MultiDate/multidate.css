@@ -11,7 +11,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
     padding: 2px;
-    margin: 2px;
+    max-width: max-content;
 }
 .multidate-container-superbrief {
     display: inline-block;

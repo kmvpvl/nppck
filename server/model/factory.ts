@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import MLString from '../../client/src/components/MLString';
+import MLString from '../../client/src/components/mlstring';
 
 export interface IFactory extends Document {
     name: string | MLString;

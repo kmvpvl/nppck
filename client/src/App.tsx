@@ -1,8 +1,15 @@
 import './App.css';
-import MLString from './components/MLString';
-import MultiDate, {IMultiDate, IDateTolerance, MULTIDATE_EXTERIOR_FULL, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from './components/MultiDate/multidate';
+import Factory from './components/factory/factory';
+import MLString from './components/mlstring';
+import MultiDate, {IMultiDate, IDateTolerance, MULTIDATE_EXTERIOR_FULL, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from './components/multidate/multidate';
 import Order, { IOrder } from './components/order/order';
+import {NPPCSettings} from './settings';
+import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
+import "bootstrap/dist/css/bootstrap.min.css";
 
+const strMenuFactory = new MLString("Factory", new Map([["ru", "Фабрика"]]));
+const strMenuMDM = new MLString("MDM", new Map([["ru", "НСИ"]]));
+const strMenuSearch = new MLString("Search", new Map([["ru", "Поиск"]]));
 async function serverFetch(url: string) {
   try{
     const response = await fetch(url);
@@ -15,24 +22,9 @@ async function serverFetch(url: string) {
   }
 }
 function App() {
-  let params: string[] = window.location.search.substring(1).split("&");
-  let lang = "";
-  params.forEach((v: string)=>{
-    let l: string[] = v.split("=");
-    if ("lang" === l[0]) {
-      lang = l[1];
-    }
-  });
-  console.log(lang);
-
   //const h =  serverFetch('http://localhost:8000/order/62b8a8e097e44f4e43268abd');
   //console.log(h);
-  const tmls = new MLString("Test", [["ru-ru", "Тест"]]);
-  console.log(tmls.toString("ru-ru"));
-  console.log({tmls});
   const md: IMultiDate = {
-    title: new MLString("Contract"),
-    subtitle: new MLString("Due date by agreement"),
     estimated: {
       datepoint: new Date(),
       left:1,
@@ -46,8 +38,6 @@ function App() {
   let mdexterior = MULTIDATE_EXTERIOR_BRIEF;
   
   const md1: IMultiDate = {
-    title: new MLString("Promise"),
-    subtitle: new MLString("Due date by agreement"),
     estimated: {
       datepoint: new Date(),
       left:1,
@@ -89,13 +79,29 @@ function App() {
         promiseDate: md1
       }
     ],
-    lang: lang
   }
   return (
-    <div className="App">
-      <MultiDate title={new MLString("Test", new Map([["ru-ru", "Тест"]]))} lang={lang} estimated={md.estimated} state={MULTIDATE_EXTERIOR_BRIEF}/>
-      <Order {...o}/>
-    </div>
+    <>
+      <Navbar collapseOnSelect expand="sm" bg="auto">
+        <Container>
+          <Navbar.Brand href="#"></Navbar.Brand>
+          <Navbar.Toggle aria-controls='basic-navbar-nav'></Navbar.Toggle>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className='me-auto'>
+              <Nav.Link href="#factory">{strMenuFactory.toString(NPPCSettings.lang)}</Nav.Link>
+              <Nav.Link href="#mdm">{strMenuMDM.toString(NPPCSettings.lang)}</Nav.Link>
+            </Nav>
+            <Form className='d-flex'>
+              <FormControl type="search" placeholder={strMenuSearch.toString(NPPCSettings.lang)+"..."} className='me-2' aria-label='Search'/>
+              <Button variant='outline-success'>{strMenuSearch.toString(NPPCSettings.lang)}</Button>
+            </Form>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+{/*       <MultiDate title={new MLString("Test", new Map([["ru-ru", "Тест"]]))} lang={NPPCSettings.lang} estimated={md.estimated} state={MULTIDATE_EXTERIOR_BRIEF}/>
+ */}      <Order {...o}/>
+      <Factory/>
+    </>
   );
 }
 

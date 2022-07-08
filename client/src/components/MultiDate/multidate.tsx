@@ -1,5 +1,5 @@
 import { Component } from "react";
-import MLString from "../MLString";
+import MLString from "../mlstring";
 import "./multidate.css";
 
 const strEst = new MLString("Estimated", new Map([["ru-ru", "Ожидаемый"]]));
@@ -52,7 +52,7 @@ export const MULTIDATE_EXTERIOR_FULL: IMultiDateExterior = {
   showTime: true
 }
 export interface IMultiDate {
-  title: MLString;
+  title?: MLString;
   subtitle?: MLString;
   estimated: IDateTolerance
   baseline?: Map<string, IDateTolerance>;
@@ -64,7 +64,21 @@ class MLComponent extends Component<{}, {}> {
 
 }
 
-class MultiDate extends Component<IMultiDate, IMultiDateExterior> {
+class DateTolerance implements IDateTolerance {
+  public datepoint: Date = new Date();
+  public left?: number;
+  public right?: number;
+  constructor(dp: Date, left?: number, right?:number) {
+    this.datepoint = dp;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+class MultiDate extends Component<IMultiDate, IMultiDateExterior> implements IMultiDate {
+    title?: MLString = this.props.title;
+    estimated: DateTolerance = this.props.estimated;
+
     constructor(props: any) {
       super(props);
       if (props.state) {
@@ -109,7 +123,7 @@ class MultiDate extends Component<IMultiDate, IMultiDateExterior> {
       default:
         return (
           <div className={"multidate-container-"+s.style}>
-            <div className="multidate-title">{p.title.toString(p.lang)}
+            <div className="multidate-title">{p.title?.toString(p.lang)}
               <span className="multidate-expandinfo">↕</span>
             </div>
             <div className="multidate-dateselected">{this.getDateTimeString()}<span className="multidate-tolerance">{this.getToleranceString()}</span></div>

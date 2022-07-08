@@ -251,22 +251,10 @@ db.orders.insertOne(
 {
   "factoryid": ObjectId(f._id),
   "number": "R0180000395.1.22",
-  "priority": "A2",
-  "start": {
-    "estimated": new Date("2022-07-11T09:00:00.000+04:00"),
-    "baseline": [
-      new Date("2022-07-11T09:00:00.000+04:00")
-    ]
-  },
-  "finish": {
-    "estimated": new Date("2022-07-11T09:00:00.000+04:00"),
-    "baseline": [
-      new Date("2022-07-11T09:00:00.000+04:00")
-    ]
-  },
-  "contract": {
+  "priority": {"customer":"A","manufacture":"2"},
+  "contractDate": {
     "estimated": {
-      "date": new Date("2022-07-11T09:00:00.000+04:00"),
+      "datepoint": new Date("2022-07-11T09:00:00.000+04:00"),
       "tolerance": {
         "up": 10,
         "down": 0
@@ -274,7 +262,7 @@ db.orders.insertOne(
     },
     "baseline": [
       {
-        "date": new Date("2022-07-11T09:00:00.000+04:00"),
+        "datepoint": new Date("2022-07-11T09:00:00.000+04:00"),
         "tolerance": {
           "up": 10,
           "down": 0
@@ -282,9 +270,9 @@ db.orders.insertOne(
       }
     ]
   },
-  "promise": {
+  "promiseDate": {
     "estimated": {
-      "date": new Date("2022-07-11T09:00:00.000+04:00"),
+      "datepoint": new Date("2022-07-11T09:00:00.000+04:00"),
       "tolerance": {
         "up": 10,
         "down": 0
@@ -303,20 +291,20 @@ db.orders.insertOne(
   "customer": {
     "ref": "c2"
   },
-  "planning_mode": "auto",
-  "precedors": [],
-  "constraints": [
-    {
-      "type": "asap",
-      "date": ""
-    }
-  ],
   "calendar": "russia-std",
   "products": [
     {
       type: "material",
       ref: ObjectId(material_wheelpair_qc._id),
-      count: 100
+      count: 100,
+      "planning_mode": "auto",
+      "precedors": [],
+      "constraints": [
+        {
+          "type": "asap",
+          "date": ""
+        }
+      ]
     },
     {}
   ]
