@@ -5,6 +5,7 @@ import "./workcenter.css";
 import { IOperation } from "../operation/operation";
 import { UserInputCoordinates } from "geolib/es/types";
 import { getCenterOfBounds, getLatitude, getLongitude } from "geolib";
+import { ViewPort } from "../factory/factory";
 
 
 export interface IWorkcenter {
@@ -12,24 +13,36 @@ export interface IWorkcenter {
     fullname?: string | MLString;
     workcenters?: Array<IWorkcenter>;
     operations?: Array<IOperation>;
-    bounds: Array<UserInputCoordinates>;
+    bounds: {
+        polygon: Array<UserInputCoordinates>;
+        viewport?: ViewPort;
+    }
 }
-export default class Workcenter extends React.Component<IWorkcenter> {
+interface IWorkcenterState {
+}
+export default class Workcenter extends React.Component<IWorkcenter, IWorkcenterState> {
     private center: UserInputCoordinates;
     private ref: React.RefObject<HTMLSpanElement>;
+    private x: number = 0;
+    private y: number = 0;
 
     constructor(props: IWorkcenter){
         super(props);
         this.ref = React.createRef();
-        this.center = getCenterOfBounds(this.props.bounds);
+        this.center = getCenterOfBounds(this.props.bounds.polygon);
     }
     componentDidMount(){
         this.setState({});
+        if (this.props.bounds.viewport) {
+            let vp = this.props.bounds.viewport;
+            this.x = vp.LAT2X(getLatitude (this.center));
+            this.y = vp.LNG2Y(getLongitude(this.center));         
+        }
         //console.log(this.ref);
     }
     render() {
         return (
-            <span ref={this.ref} style={{top:10*getLongitude(this.center), left:10*getLatitude (this.center)}} className="workcenter">
+            <span ref={this.ref} style={{top: this.y, left: this.x}} className="workcenter">
                 <span className="workcenter-heavy-indicator"></span>
                 Workcenter:{this.props.name}: {getLatitude (this.center)}: {getLongitude(this.center)}: size {this.ref.current?.offsetWidth} {this.ref.current?.offsetHeight}
             </span>

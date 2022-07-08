@@ -1,14 +1,17 @@
 import './App.css';
 import Factory from './components/factory/factory';
+import StatusLine, {IStatusLine, IStatusLineState} from './components/statusline/statusline';
 import MLString from './components/mlstring';
 import MultiDate, {IMultiDate, IDateTolerance, MULTIDATE_EXTERIOR_FULL, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from './components/multidate/multidate';
 import Order, { IOrder } from './components/order/order';
 import {NPPCSettings} from './settings';
 import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { IWorkcenter } from './components/workcenter/workcenter';
 
 const strMenuFactory = new MLString("Factory", new Map([["ru", "Фабрика"]]));
 const strMenuMDM = new MLString("MDM", new Map([["ru", "НСИ"]]));
+const strMenuOrders = new MLString("Orders", new Map([["ru", "Заказы"]]));
 const strMenuSearch = new MLString("Search", new Map([["ru", "Поиск"]]));
 async function serverFetch(url: string) {
   try{
@@ -50,6 +53,21 @@ function App() {
   };
   //md1.exterior = MULTIDATE_EXTERIOR_SUPER_BRIEF;
   //md1.exterior.showEstimated = true;
+  let wcs: IWorkcenter[] = [];
+  wcs.push({
+    name: "Test1",
+    bounds: {
+        polygon: [{lat: 1, lng:33}]
+    }
+  });
+
+  wcs.push({
+      name: "Test2",
+      bounds: {
+          polygon: [{lat: 10, lng:35}]
+      }
+  });
+
 
   const o: IOrder = {
     number: "R0180000395.1.22",
@@ -89,6 +107,7 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className='me-auto'>
               <Nav.Link href="#factory">{strMenuFactory.toString(NPPCSettings.lang)}</Nav.Link>
+              <Nav.Link href="#orders">{strMenuOrders.toString(NPPCSettings.lang)}</Nav.Link>
               <Nav.Link href="#mdm">{strMenuMDM.toString(NPPCSettings.lang)}</Nav.Link>
             </Nav>
             <Form className='d-flex'>
@@ -99,8 +118,10 @@ function App() {
         </Container>
       </Navbar>
 {/*       <MultiDate title={new MLString("Test", new Map([["ru-ru", "Тест"]]))} lang={NPPCSettings.lang} estimated={md.estimated} state={MULTIDATE_EXTERIOR_BRIEF}/>
- */}      <Order {...o}/>
-      <Factory/>
+      <Order {...o}/>
+ */}      
+      <Factory workcenters={wcs} name={new MLString("Whellpair")}/>
+      <StatusLine></StatusLine>
     </>
   );
 }

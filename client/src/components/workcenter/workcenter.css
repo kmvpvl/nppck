@@ -1,5 +1,5 @@
 .workcenter {
-    position: relative;
+    position:sticky;
     border: var(--element-border-style);
     border-radius: 1em;
     min-height: max-content;
