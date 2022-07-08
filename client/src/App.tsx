@@ -1,5 +1,6 @@
 import './App.css';
 import Factory from './components/factory/factory';
+import StatusLine, {IStatusLine, IStatusLineState} from './components/statusline/statusline';
 import MLString from './components/mlstring';
 import MultiDate, {IMultiDate, IDateTolerance, MULTIDATE_EXTERIOR_FULL, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from './components/multidate/multidate';
 import Order, { IOrder } from './components/order/order';
@@ -9,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const strMenuFactory = new MLString("Factory", new Map([["ru", "Фабрика"]]));
 const strMenuMDM = new MLString("MDM", new Map([["ru", "НСИ"]]));
+const strMenuOrders = new MLString("Orders", new Map([["ru", "Заказы"]]));
 const strMenuSearch = new MLString("Search", new Map([["ru", "Поиск"]]));
 async function serverFetch(url: string) {
   try{
@@ -89,6 +91,7 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className='me-auto'>
               <Nav.Link href="#factory">{strMenuFactory.toString(NPPCSettings.lang)}</Nav.Link>
+              <Nav.Link href="#orders">{strMenuOrders.toString(NPPCSettings.lang)}</Nav.Link>
               <Nav.Link href="#mdm">{strMenuMDM.toString(NPPCSettings.lang)}</Nav.Link>
             </Nav>
             <Form className='d-flex'>
@@ -99,8 +102,10 @@ function App() {
         </Container>
       </Navbar>
 {/*       <MultiDate title={new MLString("Test", new Map([["ru-ru", "Тест"]]))} lang={NPPCSettings.lang} estimated={md.estimated} state={MULTIDATE_EXTERIOR_BRIEF}/>
- */}      <Order {...o}/>
+      <Order {...o}/>
+ */}      
       <Factory/>
+      <StatusLine></StatusLine>
     </>
   );
 }

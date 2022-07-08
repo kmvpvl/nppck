@@ -68,16 +68,16 @@
     -webkit-mask-image: linear-gradient(90deg, transparent 2em, var(--active-on-hover-color) 10em);
     color: var(--hide-as-option-color);
 }
-.multidate-dateselector-prev:hover {
-    text-align: right;
-    color: var(--active-on-hover-color);
-    cursor: pointer;
-    -webkit-mask-image:none;
-}
 
 .multidate-dateselector-next {
     -webkit-mask-image: linear-gradient(-90deg, transparent 2em, var(--active-on-hover-color) 10em);
     color: var(--hide-as-option-color);
 }
 
+.multidate-dateselector-prev:hover, .multidate-dateselector-next:hover {
+    text-align: right;
+    color: var(--active-on-hover-color);
+    cursor: pointer;
+    -webkit-mask-image:none;
+}
 
