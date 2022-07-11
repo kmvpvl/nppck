@@ -1,3 +1,4 @@
+import { NPPCSettings } from "../settings";
 
 export default class MLString extends String {
     values: Map<string, string>
@@ -6,6 +7,7 @@ export default class MLString extends String {
         this.values = new Map<string, string>(others);
     }
     public toString(lang?: string): string {
+        if (!lang) lang = NPPCSettings.lang;
         return (lang?(this.values.has(lang)?this.values.get(lang):super.toString()):super.toString()) as string;
     }
 }

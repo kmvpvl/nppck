@@ -57,7 +57,6 @@ export interface IMultiDate {
   estimated: IDateTolerance
   baseline?: Map<string, IDateTolerance>;
   state?: IMultiDateExterior;
-  lang?: string;
 }
 
 class MLComponent extends Component<{}, {}> {
@@ -123,12 +122,12 @@ class MultiDate extends Component<IMultiDate, IMultiDateExterior> implements IMu
       default:
         return (
           <div className={"multidate-container-"+s.style}>
-            <div className="multidate-title">{p.title?.toString(p.lang)}
+            <div className="multidate-title">{p.title}
               <span className="multidate-expandinfo">↕</span>
             </div>
             <div className="multidate-dateselected">{this.getDateTimeString()}<span className="multidate-tolerance">{this.getToleranceString()}</span></div>
             <div className="multidate-dateselector">
-              <span className="multidate-dateselector-prev">{strEst.toString(p.lang)}</span>
+              <span className="multidate-dateselector-prev">{strEst}</span>
               <span className="multidate-dateselector-cur">Baseline#0</span>
               <span className="multidate-dateselector-next">Baseline#1</span>
             </div>

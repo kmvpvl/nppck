@@ -43,7 +43,6 @@ export interface  IOrder {
     precedors?: Array<string>;
     planning_mode?: string;
     products: Array<IOrderPos>;
-    lang?: string;
 }
 export class IOrder {
 
@@ -72,10 +71,9 @@ export default class Order extends Component<IOrder> {
                     <MultiDate title={strContract} 
                     estimated={pp.contractDate.estimated} 
                     state={MULTIDATE_EXTERIOR_BRIEF} 
-                    lang={pp.lang} 
                     subtitle={strContractSubtitle}/>
                 </span>
-                <span className="order-promise"><MultiDate title={strPromise} estimated={pp.contractDate.estimated} state={MULTIDATE_EXTERIOR_BRIEF} lang={pp.lang}/></span>
+                <span className="order-promise"><MultiDate title={strPromise} estimated={pp.contractDate.estimated} state={MULTIDATE_EXTERIOR_BRIEF}/></span>
                 <span className="order-priority">{pp.priority.customer+pp.priority.manufacture}</span>
                 <span className="order-customer">RNFT Worldwide LLC</span>
                 <span className="order-products">
@@ -89,8 +87,5 @@ export default class Order extends Component<IOrder> {
                 </span>
             </span>
         );
-    }
-    componentDidMount() {
-        
     }
 }
