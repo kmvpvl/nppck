@@ -14,8 +14,7 @@ function getLang(): string{
 }
 export const NPPCSettings = {
     lang: getLang(),
-    connectionServer: {
-        url: "http://localhost",
-        port: 8000
+    server: {
+        url: "http://localhost:8000/",
     }
 }

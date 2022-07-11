@@ -168,6 +168,9 @@ f = db.factories.insertOne({
       id: wcWheelSupply,
       name: "WheelSupply",
       fullanme: "",
+      bounds: {
+          polygon: [{lat: 10, lng:35}]
+      },
       operations: [
         {
           ref: ObjectId(operation_supplywheel._id),
@@ -179,6 +182,9 @@ f = db.factories.insertOne({
     {
       id: wcBlankSupply,
       name: "BlankSupply",
+      bounds: {
+          polygon: [{lat: 10, lng:45}]
+      },
       operations: [
         {
           ref: ObjectId(operation_supplyblankshaft._id),
@@ -190,6 +196,9 @@ f = db.factories.insertOne({
     {
       id: wcMetallProcessing,
       name: "MetallProcessing",
+      bounds: {
+          polygon: [{lat: 30, lng:35}]
+      },
       operations: [
         {
           ref: ObjectId(operation_blankshaftprocessing._id),
@@ -201,6 +210,9 @@ f = db.factories.insertOne({
     {
       id: wcAssembly,
       name: "Assembly",
+      bounds: {
+          polygon: [{lat: 30, lng:45}]
+      },
       operations: [
         {
           ref: ObjectId(operation_wheelpairassemble._id),
@@ -212,6 +224,9 @@ f = db.factories.insertOne({
     {
       id: wcQC,
       name: "QualityCheck",
+      bounds: {
+          polygon: [{lat: 50, lng:35}]
+      },
       operations: [
         {
           ref: ObjectId(operation_wheelpair_qc._id),

@@ -5,28 +5,16 @@ import MLString from './components/mlstring';
 import MultiDate, {IMultiDate, IDateTolerance, MULTIDATE_EXTERIOR_FULL, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from './components/multidate/multidate';
 import Order, { IOrder } from './components/order/order';
 import {NPPCSettings} from './settings';
-import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
+import { Button, Container, Form, FormControl, Nav, Navbar, NavbarBrand } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { IWorkcenter } from './components/workcenter/workcenter';
+import Workcenter, { IWorkcenter } from './components/workcenter/workcenter';
+import React, { Children } from 'react';
 
 const strMenuFactory = new MLString("Factory", new Map([["ru", "Фабрика"]]));
 const strMenuMDM = new MLString("MDM", new Map([["ru", "НСИ"]]));
 const strMenuOrders = new MLString("Orders", new Map([["ru", "Заказы"]]));
 const strMenuSearch = new MLString("Search", new Map([["ru", "Поиск"]]));
-async function serverFetch(url: string) {
-  try{
-    const response = await fetch(url);
-    const json = await response.json();
-    return json;
-  }
-  catch(err) {
-    throw err;
-    console.log(err);
-  }
-}
 function App() {
-  //const h =  serverFetch('http://localhost:8000/order/62b8a8e097e44f4e43268abd');
-  //console.log(h);
   const md: IMultiDate = {
     estimated: {
       datepoint: new Date(),
@@ -51,23 +39,6 @@ function App() {
       ["1", {datepoint: new Date()}]
     ])
   };
-  //md1.exterior = MULTIDATE_EXTERIOR_SUPER_BRIEF;
-  //md1.exterior.showEstimated = true;
-  let wcs: IWorkcenter[] = [];
-  wcs.push({
-    name: "Test1",
-    bounds: {
-        polygon: [{lat: 1, lng:33}]
-    }
-  });
-
-  wcs.push({
-      name: "Test2",
-      bounds: {
-          polygon: [{lat: 10, lng:35}]
-      }
-  });
-
 
   const o: IOrder = {
     number: "R0180000395.1.22",
@@ -120,7 +91,7 @@ function App() {
 {/*       <MultiDate title={new MLString("Test", new Map([["ru-ru", "Тест"]]))} lang={NPPCSettings.lang} estimated={md.estimated} state={MULTIDATE_EXTERIOR_BRIEF}/>
       <Order {...o}/>
  */}      
-      <Factory workcenters={wcs} name={new MLString("Whellpair")}/>
+      <Factory id='62c992c14b3fea2d4d5a6cd3'/>
       <StatusLine></StatusLine>
     </>
   );

@@ -1,10 +1,11 @@
 .workcenter {
-    position:sticky;
+    position:absolute;
     border: var(--element-border-style);
     border-radius: 1em;
     min-height: max-content;
     display: inline-block;
     padding: 2px;
+    width: 13em;
 }
 .workcenter-heavy-indicator{
     width: 2em;
