@@ -1,0 +1,9 @@
+{
+    "Factory": {
+        "initial": "62c992c14b3fea2d4d5a6cd3"
+    },
+
+    "Backend": {
+        "baseURL": "http://localhost:8000/"
+    }
+}

@@ -1,3 +1,4 @@
+import DEFAULT_SETTINGS from "./settings.json";
 function getLang(): string{
     let params: string[] = window.location.search.substring(1).split("&");
     let lang = "";
@@ -15,6 +16,7 @@ function getLang(): string{
 export const NPPCSettings = {
     lang: getLang(),
     server: {
-        url: "http://localhost:8000/",
-    }
+        url: DEFAULT_SETTINGS.Backend.baseURL,
+    },
+    factory: DEFAULT_SETTINGS.Factory.initial
 }
