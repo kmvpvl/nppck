@@ -1,0 +1,328 @@
+// MongoDB Playground
+// To disable this template go to Settings | MongoDB | Use Default Template For Playground.
+// Make sure you are connected to enable completions and to be able to run a playground.
+// Use Ctrl+Space inside a snippet or a string literal to trigger completions.
+
+// Select the database to use.
+use('NPP');
+
+// The drop() command destroys all data from a collection.
+// Make sure you run it against the correct database and collection.
+db.factories.drop();
+db.orders.drop();
+db.materials.drop();
+db.operations.drop();
+
+// Insert a few documents into the sales collection.
+material_wheel = db.materials.insertOne({
+  name: "Wheel",
+  fullanme: "Wheel",
+  cost: "2300",
+});
+
+material_blankshaft = db.materials.insertOne({
+  name: "blankshaft",
+  fullanme: "Blank shaft",
+  cost: "4300",
+});
+
+material_shaft = db.materials.insertOne({
+  name: "shaft",
+  fullanme: "Shaft",
+  cost: "4300",
+});
+
+material_wheelpair = db.materials.insertOne({
+  name: "wheelpair",
+  fullanme: "Wheelpair",
+  cost: "4300",
+});
+
+material_wheelpair_qc = db.materials.insertOne({
+  name: "wheelpairqc",
+  fullanme: "Wheelpair after quality check",
+  cost: "4300",
+});
+
+operation_supplywheel = db.operations.insertOne({
+  name: "supplywheel",
+  fullname: "Supply wheels",
+  consistsof:[],
+  auxiliary:[],
+  tools:[],
+  cost: 2300,
+  duration: 150,
+  results:[
+    {
+      type: "material",
+      ref: ObjectId(material_wheel._id),
+      count:10
+    }
+  ]
+});
+
+operation_supplyblankshaft = db.operations.insertOne({
+  name: "supplyblankshaft",
+  fullname: "Supply blank shafts",
+  consistsof:[],
+  auxiliary:[],
+  tools:[],
+  cost: 2300,
+  duration: 150,
+  results:[
+    {
+      type: "material",
+      ref: ObjectId(material_blankshaft._id),
+      count: 5
+    }
+  ]
+});
+
+operation_blankshaftprocessing = db.operations.insertOne({
+  name: "blankshaftprocessing",
+  fullname: "Blank shaft processing",
+  consistsof:[
+    {
+      type: "material",
+      ref: ObjectId(material_blankshaft._id),
+      count: 1
+    }
+  ],
+  auxiliary:[],
+  tools:[],
+  cost: 2300,
+  duration: 150,
+  results:[
+    {
+      type: "material",
+      ref: ObjectId(material_shaft._id),
+      count: 1
+    }
+  ]
+});
+
+operation_wheelpairassemble = db.operations.insertOne({
+  name: "wheelpairassemble",
+  fullname: "Wheel pair assemble",
+  consistsof:[
+    {
+      type: "material",
+      ref: ObjectId(material_shaft._id),
+      count: 1
+    },
+    {
+      type: "material",
+      ref: ObjectId(material_wheel._id),
+      count: 2
+    }
+  ],
+  auxiliary:[],
+  tools:[],
+  cost: 2300,
+  duration: 150,
+  results:[
+    {
+      type: "material",
+      ref: ObjectId(material_wheelpair._id),
+      count: 1
+    }
+  ]
+});
+
+operation_wheelpair_qc = db.operations.insertOne({
+  name: "wheelpairqc",
+  fullname: "Wheel pair quality check",
+  consistsof:[
+    {
+      type: "material",
+      ref: ObjectId(material_wheelpair._id),
+      count: 1
+    }
+  ],
+  auxiliary:[],
+  tools:[],
+  cost: 2300,
+  duration: 150,
+  results:[
+    {
+      type: "material",
+      ref: ObjectId(material_wheelpair_qc._id),
+      count: 1
+    }
+  ]
+});
+
+wcWheelSupply = new ObjectId();
+wcBlankSupply = new ObjectId();
+wcMetallProcessing = new ObjectId();
+wcAssembly = new ObjectId();
+wcQC = new ObjectId();
+
+f = db.factories.insertOne({
+  name: "WF",
+  fullname: "Wheelpair fatory",
+  "created": new Date(),
+  "modified": new Date(),
+  workcenters:[
+    {
+      id: wcWheelSupply,
+      name: "WheelSupply",
+      fullanme: "",
+      bounds: {
+          polygon: [{lat: 10, lng:35}]
+      },
+      operations: [
+        {
+          ref: ObjectId(operation_supplywheel._id),
+          cost: 2300,
+          duration: 15
+        }
+      ]
+    },
+    {
+      id: wcBlankSupply,
+      name: "BlankSupply",
+      bounds: {
+          polygon: [{lat: 10, lng:45}]
+      },
+      operations: [
+        {
+          ref: ObjectId(operation_supplyblankshaft._id),
+          cost: 2300,
+          duration: 15
+        }
+      ]
+    },
+    {
+      id: wcMetallProcessing,
+      name: "MetallProcessing",
+      bounds: {
+          polygon: [{lat: 30, lng:35}]
+      },
+      operations: [
+        {
+          ref: ObjectId(operation_blankshaftprocessing._id),
+          cost: 2300,
+          duration: 15
+        }
+      ]
+    },
+    {
+      id: wcAssembly,
+      name: "Assembly",
+      bounds: {
+          polygon: [{lat: 30, lng:45}]
+      },
+      operations: [
+        {
+          ref: ObjectId(operation_wheelpairassemble._id),
+          cost: 2300,
+          duration: 15
+        }
+      ]
+    },
+    {
+      id: wcQC,
+      name: "QualityCheck",
+      bounds: {
+          polygon: [{lat: 50, lng:35}]
+      },
+      operations: [
+        {
+          ref: ObjectId(operation_wheelpair_qc._id),
+          cost: 2300,
+          duration: 15
+        }
+      ]
+    }
+  ],
+  logistics: [
+    {
+      name: "Workshop crane",
+      from:[
+        wcWheelSupply,
+        wcBlankSupply,
+        wcMetallProcessing,
+        wcAssembly,
+        wcQC
+      ],
+      to:[
+        wcWheelSupply,
+        wcBlankSupply,
+        wcMetallProcessing,
+        wcAssembly,
+        wcQC
+      ],
+      bidirect: true,
+      volume: 1,
+      weight: 1000,
+      cost: 20,
+      duration: 15
+    }
+  ]
+});
+
+db.orders.insertOne(
+{
+  "factoryid": ObjectId(f._id),
+  "number": "R0180000395.1.22",
+  "priority": {"customer":"A","manufacture":"2"},
+  "contractDate": {
+    "estimated": {
+      "datepoint": new Date("2022-07-11T09:00:00.000+04:00"),
+      "tolerance": {
+        "up": 10,
+        "down": 0
+      }
+    },
+    "baseline": [
+      {
+        "datepoint": new Date("2022-07-11T09:00:00.000+04:00"),
+        "tolerance": {
+          "up": 10,
+          "down": 0
+        }
+      }
+    ]
+  },
+  "promiseDate": {
+    "estimated": {
+      "datepoint": new Date("2022-07-11T09:00:00.000+04:00"),
+      "tolerance": {
+        "up": 10,
+        "down": 0
+      }
+    },
+    "baseline": [
+      {
+        "date": new Date("2022-07-11T09:00:00.000+04:00"),
+        "tolerance": {
+          "up": 10,
+          "down": 0
+        }
+      }
+    ]
+  },
+  "customer": {
+    "ref": "c2"
+  },
+  "calendar": "russia-std",
+  "products": [
+    {
+      type: "material",
+      ref: ObjectId(material_wheelpair_qc._id),
+      count: 100,
+      "planning_mode": "auto",
+      "precedors": [],
+      "constraints": [
+        {
+          "type": "asap",
+          "date": ""
+        }
+      ]
+    },
+    {}
+  ]
+}
+);
+

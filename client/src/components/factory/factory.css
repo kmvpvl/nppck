@@ -1,0 +1,7 @@
+.factory {
+    min-width: 100%;
+    min-height: 100%;
+    border: var(--element-border-style);
+    padding:2px;
+    position: relative;
+}

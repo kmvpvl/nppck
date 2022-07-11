@@ -1,0 +1,83 @@
+.multidate-container-full {
+    border: var(--element-border-style);
+    display: inline-flex;
+    flex-direction: column;
+    max-width: max-content;
+    padding: 0.2em;
+}
+.multidate-container-brief {
+    border: var(--element-border-style);
+    display: inline-grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    padding: 2px;
+    max-width: max-content;
+}
+.multidate-container-superbrief {
+    display: inline-block;
+    max-width: max-content;
+}
+
+.multidate-title {
+    /* font-size: large; */
+    font-weight: bold;
+    display: inline-block;
+    /* max-width: 100%; */
+    text-align: left;
+}
+
+.multidate-subtitle {
+    font-size: small;
+    display: inline-block;
+    max-width: max-content;
+}
+.multidate-datepoint {
+    font-size:medium;
+    display: inline-block;
+    max-width: max-content;
+    text-align: center;
+}
+.multidate-datepoint-label {
+    font-size: xx-small;
+}
+
+.multidate-tolerance {
+    font-size: small;
+    display: inline-block;
+    max-width: max-content;
+}
+
+.multidate-expandinfo {
+    float: right;
+    transform: rotate(45deg) translate(0.2em, 0);
+    width: 2ex;
+    height: 2ex;
+    font-size: small;
+}
+.multidate-dateselector {
+    max-width: max-content;
+    overflow: hidden;
+    display: inline-grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3px;
+    font-size: x-small;
+}
+.multidate-dateselector-prev {
+    text-align: right;
+    -webkit-mask-image: linear-gradient(90deg, transparent 2em, var(--active-on-hover-color) 10em);
+    color: var(--hide-as-option-color);
+}
+
+.multidate-dateselector-next {
+    -webkit-mask-image: linear-gradient(-90deg, transparent 2em, var(--active-on-hover-color) 10em);
+    color: var(--hide-as-option-color);
+}
+
+.multidate-dateselector-prev:hover, .multidate-dateselector-next:hover {
+    text-align: right;
+    color: var(--active-on-hover-color);
+    cursor: pointer;
+    -webkit-mask-image:none;
+}
+
