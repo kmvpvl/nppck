@@ -6,6 +6,7 @@ import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstr
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, {  } from 'react';
 import Orders from './components/orders/orders';
+import { NPPCSettings } from './settings';
 
 const strMenuFactory = new MLString("Factory", new Map([["ru", "Фабрика"]]));
 const strMenuMDM = new MLString("MDM", new Map([["ru", "НСИ"]]));
