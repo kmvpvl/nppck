@@ -59,7 +59,7 @@ export default class NPPCApp extends React.Component<INPPCApp, INPPCAppState> {
               <Nav.Link onClick={this.menuChoosen} href="#mdm">{strMenuMDM}</Nav.Link>
             </Nav>
             <Form className='d-flex'>
-              <FormControl type="search" placeholder={strMenuSearch+"..."} className='me-2' aria-label='Search'/>
+              <FormControl type="search" placeholder={strMenuSearch.toString()+"..."} className='me-2' aria-label='Search'/>
               <Button variant='outline-success'>{strMenuSearch}</Button>
             </Form>
           </Navbar.Collapse>

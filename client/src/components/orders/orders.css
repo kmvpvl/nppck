@@ -19,3 +19,8 @@
 
 orders-boards {
 }
+
+.select {
+    max-width: fit-content;
+    display: inline-block;
+}
