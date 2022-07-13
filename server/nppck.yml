@@ -22,6 +22,23 @@ servers:
         default: 'v0'
 components:
   schemas:
+    mlstring:
+      type: object
+      required:
+        - default
+      properties:
+        default:
+          description: Default value of string variable
+          type: string
+        values:
+            description: Pairs lang=>string
+            type: array
+            items:
+                type: array
+                items:
+                    maxItems: 2
+                    minItems: 2
+                    type: string
     tool:
       type: object
       properties:
@@ -122,11 +139,9 @@ components:
           type: string
           description: Unique id of the Factory
         name:
-          type: string
-          description: Short name of factory
+          $ref: "#/components/schemas/mlstring"
         fullname:
-          type: string
-          description: Full name of factory
+          $ref: "#/components/schemas/mlstring"
         map:
           type: object
         workcenters: 

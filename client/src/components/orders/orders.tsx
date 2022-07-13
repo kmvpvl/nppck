@@ -4,27 +4,27 @@ import { Button, ButtonGroup, Col, Container, Form, FormCheck, FormControl, Nav,
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./orders.css";
 
-const strFilter = new MLString("Filter", new Map([["ru", "Фильтр"]]));
+const strFilter = new MLString({default:"Filter", values: new Map([["ru", "Фильтр"]])});
 type tsView = "list" | "boards";
-const strViewType = new MLString("Type", new Map([["ru", "Вид представления"]]));
-const strViewTypeList = new MLString("List", new Map([["ru", "Список"]]));
-const strViewTypeBucket = new MLString("Buckets", new Map([["ru", "Дорожки"]]));
+const strViewType = new MLString({default:"Type", values: new Map([["ru", "Вид представления"]])});
+const strViewTypeList = new MLString({default:"List", values: new Map([["ru", "Список"]])});
+const strViewTypeBucket = new MLString({default:"Buckets", values: new Map([["ru", "Дорожки"]])});
 
 type tsGroupBy = "workcenter" | "progress" | "status" | "label" | "priority";
-const strGroupBy = new MLString("Group by", new Map([["ru", "Группировка по"]]));
-const strGroupByWorkshop = new MLString("Workcenter", new Map([["ru", "Раб.центр"]]));
-const strGroupByProgress = new MLString("Progress", new Map([["ru", "Ход выполнения"]]));
-const strGroupByStatus = new MLString("Status", new Map([["ru", "Статус"]]));
-const strGroupByLabel = new MLString("Label", new Map([["ru", "Метка"]]));
-const strGroupByPriority = new MLString("Priority", new Map([["ru", "Приоритет"]]));
+const strGroupBy = new MLString({default:"Group by", values: new Map([["ru", "Группировка по"]])});
+const strGroupByWorkshop = new MLString({default:"Workcenter", values: new Map([["ru", "Раб.центр"]])});
+const strGroupByProgress = new MLString({default:"Progress", values: new Map([["ru", "Ход выполнения"]])});
+const strGroupByStatus = new MLString({default:"Status", values: new Map([["ru", "Статус"]])});
+const strGroupByLabel = new MLString({default:"Label", values: new Map([["ru", "Метка"]])});
+const strGroupByPriority = new MLString({default:"Priority", values: new Map([["ru", "Приоритет"]])});
 
 type tsStatus = "readytostart" | "inprogress" | "waiting" | "stopped" | "finished";
-const strStatus = new MLString("Status", new Map([["ru", "Статус"]]));
-const strStatusReadytostart = new MLString("Ready to start", new Map([["ru", "Готов к запуску"]]));
-const strStatusInprogres = new MLString("Inprogress", new Map([["ru", "Изготавливается"]]));
-const strStatusWaiting = new MLString("Waiting", new Map([["ru", "Ждёт"]]));
-const strStatusStopped = new MLString("Stoppped", new Map([["ru", "Остановлен"]]));
-const strStatusFinished = new MLString("Finished", new Map([["ru", "Завершён"]]));
+const strStatus = new MLString({default:"Status", values: new Map([["ru", "Статус"]])});
+const strStatusReadytostart = new MLString({default:"Ready to start", values: new Map([["ru", "Готов к запуску"]])});
+const strStatusInprogres = new MLString({default:"Inprogress", values: new Map([["ru", "Изготавливается"]])});
+const strStatusWaiting = new MLString({default:"Waiting", values: new Map([["ru", "Ждёт"]])});
+const strStatusStopped = new MLString({default:"Stoppped", values: new Map([["ru", "Остановлен"]])});
+const strStatusFinished = new MLString({default:"Finished", values: new Map([["ru", "Завершён"]])});
 
 type tsOneManyOptions = "any" | "all";
 

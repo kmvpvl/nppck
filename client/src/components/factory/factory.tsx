@@ -1,6 +1,6 @@
 import React, { Component, MutableRefObject, ReactNode, useRef, createRef, useCallback, useState, useId } from "react";
 import { ReactDOM } from "react";
-import MLString from "../mlstring";
+import MLString, {IMLString} from "../mlstring";
 import "./factory.css";
 
 import { UserInputCoordinates } from "geolib/es/types";
@@ -38,43 +38,46 @@ export class ViewPort {
         return {x: this.LAT2X(getLatitude(p)), y: this.LNG2Y(getLongitude(p))};
     }
 }
-
+type IFactoryData = {
+    name: IMLString | MLString;
+    fullname: IMLString | MLString;
+    workcenters: Array<IWorkcenter>;
+}
 export interface IFactory {
-    id?: string;
-    name?: MLString;
-    fullname?: MLString;
-    workcenters?: Array<IWorkcenter>;
+    id: string;
+    updateFactoryName: (name: string)=>void;
 }
 interface IFactoryState {
 }
 export default class Factory extends React.Component<IFactory, IFactoryState> {
     private ref: React.RefObject<HTMLSpanElement>;
-    private workcenters: IWorkcenter[] = [];
+    private data: IFactoryData = {name: {default:""}, fullname: {default:""}, workcenters: []};
     constructor(props: IFactory){
         super(props);
-        if (!this.workcenters.length) {
-            serverFetch("factory/"+this.props.id).then((f: IFactory)=>{
-                // here is Factory info downloaded successfully issue#3 
-                this.workcenters = f.workcenters as IWorkcenter[];
-                let b: Array<UserInputCoordinates> = [];
-                this.workcenters.forEach((e)=>{
-                    e.bounds.polygon.forEach(element => {
-                        b.push(element)
-                    });
+        serverFetch("factory/"+this.props.id).then((f: IFactoryData)=>{
+            // here is Factory info downloaded successfully issue#3 
+            this.data = f;
+            this.data.name = new MLString(this.data.name as IMLString);
+            this.data.fullname = new MLString(this.data.fullname as IMLString);
+            this.props.updateFactoryName(this.data.name.toString());
+            console.log(this.data.fullname.toString());
+            let b: Array<UserInputCoordinates> = [];
+            this.data.workcenters.forEach((e)=>{
+                e.bounds.polygon.forEach(element => {
+                    b.push(element)
                 });
-                if (this.ref.current){
-                    if (b.length) {
-                        let vp = new ViewPort(getBounds(b), this.ref.current.clientWidth, this.ref.current.clientHeight);
-                        this.workcenters.forEach((e)=>{
-                            e.bounds.viewport = vp; 
-                        });
-                        this.setState({});
-                    }
-                }
-                if (this.ref.current) this.setState({});
             });
-        }
-        this.workcenters = this.props.workcenters?this.props.workcenters:[];
+            if (this.ref.current){
+                if (b.length) {
+                    let vp = new ViewPort(getBounds(b), this.ref.current.clientWidth, this.ref.current.clientHeight);
+                    this.data.workcenters.forEach((e)=>{
+                        e.bounds.viewport = vp; 
+                    });
+                    this.setState({});
+                }
+            }
+            if (this.ref.current) this.setState({});
+        });
         this.ref = React.createRef();
         window.addEventListener('resize', (ev:Event)=>{
             this.setState({});
@@ -87,7 +90,7 @@ export default class Factory extends React.Component<IFactory, IFactoryState> {
     render() {
         return (
             <span  className="factory" ref={this.ref}>Factory: size {this.ref.current?.clientWidth} {this.ref.current?.clientHeight}
-            {this.workcenters.map((e, i)=><Workcenter key={i} {...e}/>)}
+            {this.data.workcenters.map((e, i)=><Workcenter key={i} {...e}/>)}
             </span>
         )
     }

@@ -8,10 +8,10 @@ import React, {  } from 'react';
 import Orders from './components/orders/orders';
 import { NPPCSettings } from './settings';
 
-const strMenuFactory = new MLString("Factory", new Map([["ru", "Фабрика"]]));
-const strMenuMDM = new MLString("MDM", new Map([["ru", "НСИ"]]));
-const strMenuOrders = new MLString("Orders", new Map([["ru", "Заказы"]]));
-const strMenuSearch = new MLString("Search", new Map([["ru", "Поиск"]]));
+const strMenuFactory = new MLString({default: "Factory", values: new Map([["ru", "Фабрика"]])});
+const strMenuMDM = new MLString({default: "MDM", values: new Map([["ru", "НСИ"]])});
+const strMenuOrders = new MLString({default: "Orders", values: new Map([["ru", "Заказы"]])});
+const strMenuSearch = new MLString({default: "Search", values: new Map([["ru", "Поиск"]])});
 interface INPPCApp{
 
 }
@@ -19,6 +19,7 @@ interface INPPCAppState {
 
 }
 export default class NPPCApp extends React.Component<INPPCApp, INPPCAppState> {
+  private brand: any;
   private curChapter: string = window.location.hash?window.location.hash:"#factory";
   constructor(props: any) {
     super(props);
@@ -42,7 +43,12 @@ export default class NPPCApp extends React.Component<INPPCApp, INPPCAppState> {
         return (<Orders/>);
       case "#factory":
       default:
-        return (<Factory id={NPPCSettings.factory}/>);
+        return (<Factory id={NPPCSettings.factory} updateFactoryName={
+          (name)=>{
+            console.log(name);
+            this.brand.innerHTML = name;
+          }
+        }/>);
     }
   }
 
@@ -50,7 +56,10 @@ export default class NPPCApp extends React.Component<INPPCApp, INPPCAppState> {
     <>
       <Navbar collapseOnSelect expand="sm" bg="auto">
         <Container>
-          <Navbar.Brand href="#"></Navbar.Brand>
+          <Navbar.Brand href="#" ref={(ref: any)=>{
+            console.log("Barnd", ref);  
+            this.brand = ref;
+          }}></Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav'></Navbar.Toggle>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className='me-auto'>

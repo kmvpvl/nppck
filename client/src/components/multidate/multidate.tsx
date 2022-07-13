@@ -2,8 +2,8 @@ import { Component } from "react";
 import MLString from "../mlstring";
 import "./multidate.css";
 
-const strEst = new MLString("Estimated", new Map([["ru-ru", "Ожидаемый"]]));
-const strBL = new MLString("Baseline", new Map([["ru-ru", "ПоПлану"]]));
+const strEst = new MLString({default: "Estimated", values: new Map([["ru-ru", "Ожидаемый"]])});
+const strBL = new MLString({default: "Baseline", values: new Map([["ru-ru", "ПоПлану"]])});
 
 
 export interface IDateTolerance {

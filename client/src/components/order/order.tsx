@@ -3,9 +3,9 @@ import MultiDate, {IMultiDate, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR
 import MLString from "../mlstring";
 import "./order.css";
 
-const strContract = new MLString("Contract", new Map([["ru-ru", "Дата договора"]]));
-const strPromise = new MLString("Promise", new Map([["ru-ru", "Дата обещания"]]));
-const strContractSubtitle = new MLString("Due date by agreement", new Map([["ru-ru", "Дата в соответствии с договором"]]));
+const strContract = new MLString({default: "Contract", values: new Map([["ru-ru", "Дата договора"]])});
+const strPromise = new MLString({default: "Promise", values: new Map([["ru-ru", "Дата обещания"]])});
+const strContractSubtitle = new MLString({default: "Due date by agreement", values: new Map([["ru-ru", "Дата в соответствии с договором"]])});
 
 export interface IProduct {
     id?: string;

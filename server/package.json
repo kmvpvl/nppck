@@ -18,8 +18,6 @@
   "description": "NPPC-KANBAN TOOL Back-end",
   "main": "server.ts",
   "scripts": {
-    "start": "node build/server.js",
-    "build": "tsc",
     "dev": "nodemon"
   },
   "nodemonConfig": {

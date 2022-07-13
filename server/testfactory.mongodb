@@ -159,8 +159,18 @@ wcAssembly = new ObjectId();
 wcQC = new ObjectId();
 
 f = db.factories.insertOne({
-  name: "WF",
-  fullname: "Wheelpair fatory",
+  name: {
+    default: "WPF",
+    values: [
+      ["ru", "Цех#1"]
+    ]
+  },
+  fullname: {
+    default: "Wheelpair factory",
+    values:[
+      ["ru", "Фабрика колесных пар"]
+    ]
+  },
   "created": new Date(),
   "modified": new Date(),
   workcenters:[
