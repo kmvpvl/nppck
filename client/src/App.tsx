@@ -40,7 +40,7 @@ export default class NPPCApp extends React.Component<INPPCApp, INPPCAppState> {
       case "#mdm":
         return (<span>MDM</span>);
       case "#orders":
-        return (<Orders/>);
+        return (<Orders factoryId={NPPCSettings.factory}/>);
       case "#factory":
       default:
         return (<Factory id={NPPCSettings.factory} updateFactoryName={

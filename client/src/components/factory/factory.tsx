@@ -54,8 +54,11 @@ export default class Factory extends React.Component<IFactory, IFactoryState> {
     private data: IFactoryData = {name: {default:""}, fullname: {default:""}, workcenters: []};
     constructor(props: IFactory){
         super(props);
-        serverFetch("factory/"+this.props.id).then((f: IFactoryData)=>{
+        serverFetch("factory/"+this.props.id)
+        .then(res=>res.json())
+        .then((f: IFactoryData)=>{
             // here is Factory info downloaded successfully issue#3 
+            console.log("factory = ", f);
             this.data = f;
             this.data.name = new MLString(this.data.name as IMLString);
             this.data.fullname = new MLString(this.data.fullname as IMLString);
@@ -76,7 +79,7 @@ export default class Factory extends React.Component<IFactory, IFactoryState> {
                     this.setState({});
                 }
             }
-            if (this.ref.current) this.setState({});
+            //if (this.ref.current) this.setState({});
         });
         this.ref = React.createRef();
         window.addEventListener('resize', (ev:Event)=>{

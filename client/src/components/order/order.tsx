@@ -1,11 +1,11 @@
 import React, { Component, ReactNode } from "react";
 import MultiDate, {IMultiDate, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR_BRIEF} from '../multidate/multidate';
-import MLString from "../mlstring";
+import MLString, { IMLString } from "../mlstring";
 import "./order.css";
 
-const strContract = new MLString({default: "Contract", values: new Map([["ru-ru", "Дата договора"]])});
-const strPromise = new MLString({default: "Promise", values: new Map([["ru-ru", "Дата обещания"]])});
-const strContractSubtitle = new MLString({default: "Due date by agreement", values: new Map([["ru-ru", "Дата в соответствии с договором"]])});
+const strContract: IMLString = {default: "Contract", values: new Map([["ru-ru", "Дата договора"]])};
+const strPromise: IMLString = {default: "Promise", values: new Map([["ru-ru", "Дата обещания"]])};
+const strContractSubtitle: IMLString = {default: "Due date by agreement", values: new Map([["ru-ru", "Дата в соответствии с договором"]])};
 
 export interface IProduct {
     id?: string;
@@ -32,24 +32,27 @@ export interface ICustomer {
 
 }
 
+export interface IOrderState{}
+
+export type IPlanningMode = "auto" | "manual";
+
 export interface  IOrder {
     id?: string;
+    factoryId: string;
     number: string;
     customerPO?: string;
     contractDate: IMultiDate;
     promiseDate?: IMultiDate;
     priority: IPriority;
     customer: ICustomer;
-    precedors?: Array<string>;
-    planning_mode?: string;
+    planning_mode: IPlanningMode;
+    calendar: string;
     products: Array<IOrderPos>;
 }
-export class IOrder {
-
-}
-export default class Order extends Component<IOrder> {
-    constructor(props: any) {
+export default class Order extends Component<IOrder, IOrderState> {
+    constructor(props: IOrder) {
         super(props);
+        console.log("constructor Order = ", this.props);
     }
     render(){
         let pp = this.props as IOrder;
@@ -68,12 +71,17 @@ export default class Order extends Component<IOrder> {
             <span className="order-container">
                 <span className="order-number">#{pp.number}</span>
                 <span className="order-contract">
-                    <MultiDate title={strContract} 
-                    estimated={pp.contractDate.estimated} 
-                    state={MULTIDATE_EXTERIOR_BRIEF} 
-                    subtitle={strContractSubtitle}/>
+                    <MultiDate title={strContract}
+                        estimated={this.props.contractDate.estimated}
+                        state={MULTIDATE_EXTERIOR_BRIEF}
+                    />
                 </span>
-                <span className="order-promise"><MultiDate title={strPromise} estimated={pp.contractDate.estimated} state={MULTIDATE_EXTERIOR_BRIEF}/></span>
+                <span className="order-promise">
+                    <MultiDate title={strPromise} 
+                        estimated={this.props.contractDate.estimated} 
+                        state={MULTIDATE_EXTERIOR_BRIEF}
+                    />
+                </span>
                 <span className="order-priority">{pp.priority.customer+pp.priority.manufacture}</span>
                 <span className="order-customer">RNFT Worldwide LLC</span>
                 <span className="order-products">

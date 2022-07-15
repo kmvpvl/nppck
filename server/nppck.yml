@@ -1,252 +1,332 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
-  title: NPPC-KANBAN TOOL
-  version: '0.0.1'
+    title: NPPC-KANBAN TOOL
+    version: "0.0.1"
+security:
+    - NPPC_AUTH: []
 servers:
-  - url: '{protocol}://{environment}{server}:{port}/{version}'
-    variables:
-      protocol:
-        enum:
-          - http
-          - https
-        default: https
-      environment:
-        enum:
-          - test
-          - ''
-          - prod
-        default: '' 
-      port:
-        default: '3000'
-      version:
-        default: 'v0'
+    - url: http://localhost:8000
 components:
-  schemas:
-    mlstring:
-      type: object
-      required:
-        - default
-      properties:
-        default:
-          description: Default value of string variable
-          type: string
-        values:
-            description: Pairs lang=>string
-            type: array
-            items:
-                type: array
-                items:
-                    maxItems: 2
-                    minItems: 2
+    responses:
+        ToolNotFound:
+            description: Tool not found
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/error"
+        Unauthorized:
+            description: User cant be authorized
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/error"
+    securitySchemes:
+        NPPC_AUTH:
+            type: apiKey
+            in: header
+            name: nppc_auth
+    schemas:
+        error:
+            description: NPPC Error object
+            type: object
+            properties:
+                code: 
+                    description: Error code
                     type: string
-    tool:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique id of Tool
-          # to be extended
-    material:
-      type: object
-      properties:
-        id: 
-          type: string
-          # to be extended
-    operation:
-      type: object
-      properties:
-        id: 
-          type: string
-        name:
-          type: string
-        fullname:
-          type: string
-        consistsof:
-          type: array
-          items:
-            $ref: "#/components/schemas/material"
-        auxiliary:
-          type: array
-          items:
-            $ref: "#/components/schemas/material"
-        tools:
-          type: array
-          items:
-            $ref: "#/components/schemas/tool" 
-        cost: 
-          type: number
-        duration:
-          type: number
-        multiplication:
-          type: number
-        result:
-          type: array
-          items:
-            $ref: "#/components/schemas/material"
-    product:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        fullname:
-          type: string
-    worcenter:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique id of workcenter
-        name:
-          type: string
-        fullname:
-          type: string
-        workcenters:
-          type: array
-          items:
-            $ref: "#/components/schemas/worcenter"
-        operations:
-          type: array
-          items:
-            $ref: "#/components/schemas/operation"
-    road:
-      description: Road between workcenters
-      type: object
-      properties:
-        id: 
-          type: string
-          description: Unique id of road
-        name: 
-          type: string
-        fullname:
-          type: string
-        from:
-          type: string
-        to:
-          type: string
-        bidirect:
-          type: boolean
-        capacity:
-          type: number
-    factory:
-      type: object
-      required:
-        - "id"
-        - "name"
-      properties:
-        id:
-          type: string
-          description: Unique id of the Factory
-        name:
-          $ref: "#/components/schemas/mlstring"
-        fullname:
-          $ref: "#/components/schemas/mlstring"
-        map:
-          type: object
-        workcenters: 
-          type: array
-          items:
-            $ref: "#/components/schemas/worcenter"
-        roads:
-          type: array
-          items:
-            $ref: "#/components/schemas/road"
-    order:
-      type: object
-      properties:
-        property:
-          type: integer
-    role:
-      type: object
-      properties:
-        property:
-          type: integer
-    roles:
-      type: object
-      properties:
-        property:
-          type: integer
-    tag:
-      type: object
-      properties:
-        property:
-          type: integer
-    user:
-      type: object
-      properties:
-        property:
-          type: integer
-    message:
-      type: object
-      properties:
-        property:
-          type: integer
-    route:
-      type: object
-      properties:
-        property:
-          type: integer
-  responses:
-    FactoryNotFound:
-      description: ''
-      content:
-        application/json:
-          schema: {}
-    Unauthorized:
-      description: ''
-      content:
-        application/json:
-          schema: {}
-    
-  parameters:
-    factoryid:
-      name: factoryid
-      schema: 
-        type: string
-      in: path
-      required: true
-      description: 'Unique id of factory'
-    orderid:
-      name: orderid
-      schema: 
-        type: string
-      in: path
-      required: true
-      description: "Unique id of order"
-  
+                message:
+                    description: Full description 
+                    type: string
+        mlstring:
+            description: Multi-language string object
+            type: object
+            required:
+                - default
+            properties:
+                default:
+                    description: Default value of string variable
+                    type: string
+                values:
+                    description: Pairs lang=>string
+                    type: array
+                    items:
+                        type: array
+                        items:
+                            maxItems: 2
+                            minItems: 2
+                            type: string
+        tool:
+            description: Tool for operation
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+        material:
+            description: Material or semi-final or auxiliary
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+        operation:
+            description: Final product
+            type: object
+            properties:
+                id: 
+                    type: string
+                name:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                fullname:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                consistsof:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/material"
+                auxiliary:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/material"
+                tools:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/tool" 
+                cost: 
+                    type: number
+                duration:
+                    type: number
+                multiplication:
+                    type: number
+                result:
+                    type: array
+                    items:
+                        oneOf:
+                            - $ref: "#/components/schemas/material"
+                            - $ref: "#/components/schemas/product"
+        product:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                fullname:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                mdmcode:
+                    type: string
+                units:
+                    type: array
+                    items:
+                        oneOf:
+                            - $ref: "#/components/schemas/mlstring"
+                            - type: string
+        datetolerance:
+            type: object
+            properties:
+                datepoint:
+                    type: string
+                left:
+                    type: number
+                right:
+                    type: number
+        multidate:
+            type: object
+            properties:
+                estimated:
+                    $ref: "#/components/schemas/datetolerance"
+                baseline:
+                    type: object
+                    additionalProperties:
+                        $ref: "#/components/schemas/datetolerance"
+        orderpriority:
+            type: object
+            properties:
+                customer:
+                    type: string
+                manufacture:
+                    type: string
+        orderposition:
+            type: object
+            properties:
+                sort:
+                    type: number
+                productid:
+                    type: string
+                product:
+                    $ref: "#/components/schemas/product"
+                count:
+                    type: number
+                measurement:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                constractdate:
+                    $ref: "#/components/schemas/multidate"
+                promisedate:
+                    $ref: "#/components/schemas/multidate"
+        order:
+            type: object
+            properties:
+                number:
+                    type: string
+                priority:
+                    $ref: "#/components/schemas/orderpriority"
+                customerpo:
+                    type: string
+                contractdate:
+                    $ref: "#/components/schemas/multidate"
+                promisedate:
+                    $ref: "#/components/schemas/multidate"
+                products:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/orderposition"
+        worcenter:
+            type: object
+            properties:
+                id:
+                    description: Unique id of workcenter
+                    type: string
+                name:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                fullname:
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                workcenters:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/worcenter"
+                operations:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/operation"
+        factory:
+            description: Factory object
+            type: object
+            required:
+                - "id"
+                - "name"
+            properties:
+                id:
+                    description: Unique id of the Factory
+                    type: string
+                name:
+                    description: Short name of factory
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                fullname:
+                    description: Full name of factory
+                    oneOf:
+                        - $ref: "#/components/schemas/mlstring"
+                        - type: string
+                workcenters: 
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/worcenter"
+    parameters:
+        factoryid:
+            description: Uniq id of factory
+            name: factoryid
+            schema:
+                type: string
+            in: path
+            required: true
+        toolid:
+            description: Uniq id of tool
+            name: toolid
+            schema:
+                type: string
+            in: path
+            required: true
+        limit-maxitems:
+            description: If request has a few objects this param restricts the count of records in responce
+            name: limit-maxitems
+            in: query
+            required: false
+            schema:
+                type: number
+        limit-offset:
+            description: If request has a few objects this param asks offset first record inresponce
+            name: limit-offset
+            in: query
+            required: false
+            schema:
+                type: number
 paths:
-  /factory/{factoryid}:
-    get:
-      operationId: factory
-      description: 'Returns information about factory'
-      parameters: 
-        - $ref: "#/components/parameters/factoryid"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/factory"
-        '401':
-          $ref: "#/components/responses/Unauthorized"
-        '404':
-          $ref: "#/components/responses/FactoryNotFound"
-  /order/{orderid}:
-    get:
-      operationId: order
-      description: 'Returns information about order'
-      parameters:
-        - $ref: "#/components/parameters/orderid"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/factory"
-        '401':
-          $ref: "#/components/responses/Unauthorized"
-        '404':
-          $ref: "#/components/responses/FactoryNotFound"
+    /factory/{factoryid}:
+        get:
+            description: Returns all information about factory by its uniq id
+            operationId: factory
+            parameters:
+                - $ref: "#/components/parameters/factoryid"
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/factory'
+                404:
+                    description: Factory not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/error"
+    /factory/{factoryid}/orders:
+        get:
+            description: Returns all orders of the factory
+            operationId: orders
+            parameters:
+                - $ref: "#/components/parameters/factoryid"
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/order'
+                404:
+                    description: Factory not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/error"
+    /factory/{factoryid}/tool/{toolid}:
+        get:
+            description: Returns all information about tool by its uniq id
+            operationId: tool
+            parameters:
+                - $ref: "#/components/parameters/factoryid"
+                - $ref: "#/components/parameters/toolid"
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/tool'
+                400:
+                    description: Factory not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/error"

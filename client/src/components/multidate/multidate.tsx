@@ -1,5 +1,5 @@
 import { Component } from "react";
-import MLString from "../mlstring";
+import MLString, {IMLString} from "../mlstring";
 import "./multidate.css";
 
 const strEst = new MLString({default: "Estimated", values: new Map([["ru-ru", "Ожидаемый"]])});
@@ -52,63 +52,60 @@ export const MULTIDATE_EXTERIOR_FULL: IMultiDateExterior = {
   showTime: true
 }
 export interface IMultiDate {
-  title?: MLString;
-  subtitle?: MLString;
+  title?: IMLString;
+  subtitle?: IMLString;
   estimated: IDateTolerance
   baseline?: Map<string, IDateTolerance>;
   state?: IMultiDateExterior;
 }
 
-class MLComponent extends Component<{}, {}> {
-
-}
-
 class DateTolerance implements IDateTolerance {
-  public datepoint: Date = new Date();
+  public datepoint: Date;
   public left?: number;
   public right?: number;
-  constructor(dp: Date, left?: number, right?:number) {
-    this.datepoint = dp;
-    this.left = left;
-    this.right = right;
+  constructor(d: IDateTolerance) {
+    this.datepoint = new Date(d.datepoint);
+    this.left = d.left;
+    this.right = d.right;
   }
 }
 
-class MultiDate extends Component<IMultiDate, IMultiDateExterior> implements IMultiDate {
-    title?: MLString = this.props.title;
-    estimated: DateTolerance = this.props.estimated;
+class MultiDate extends Component<IMultiDate, IMultiDateExterior> {
+    private title: MLString;
+    private subtitle: MLString;
+    private estimated: DateTolerance;
+    private baseline: Map<string, DateTolerance>;
 
-    constructor(props: any) {
+    constructor(props: IMultiDate) {
       super(props);
+      console.log("Multidate =", this.props);
+      this.title = new MLString(props.title?props.title:"");
+      this.subtitle = new MLString(props.subtitle?props.subtitle:"");
+      this.estimated = new DateTolerance(props.estimated);
+      this.baseline = new Map<string, DateTolerance>();
       if (props.state) {
         this.state = props.state;
       } else {
         this.state = MULTIDATE_EXTERIOR_SUPERBRIEF;
       }
     }
-    getDateToView(): IDateTolerance {
-      let d: IDateTolerance = {datepoint: new Date()};
-      if (this.props.baseline) {
-
-      }
-      if (this.state.showEstimated) d = this.props.estimated;
-      return d;
+    getDateToView(): DateTolerance {
+      return this.estimated;
     }
-    getDateTimeString(d?: IDateTolerance):string {
+    getDateTimeString(d?: DateTolerance):string {
       if (!d) d = this.getDateToView();
       return this.state.showTime?d.datepoint.toLocaleString():d.datepoint.toLocaleDateString();
     }
-    getToleranceString(d?: IDateTolerance): string {
+    getToleranceString(d?: DateTolerance): string {
       if (!d) d = this.getDateToView();
       return this.state.showTolerance?"+"+d.right+";-"+d.left:"";
     }
     render() {
-      let p = this.props;
       let s = this.state;
-      const blselector = p.baseline?.forEach((bl, ind)=>
+      const blselector = this.baseline.forEach((bl, ind)=>
         <span key={ind}>Baseline#{ind}</span>
       );
-      const bls = this.props.baseline?.forEach((bl, ind)=>
+      const bls = this.baseline?.forEach((bl, ind)=>
         <span className="multidate-datepoint" key={ind}><span className="multidate-datepoint-label">BL{ind}</span>{s.showTime?bl.datepoint.toLocaleString():bl.datepoint.toLocaleDateString()}<span>+{bl.right};-{bl.left}</span></span>
       );
       switch (s.style) {
@@ -122,7 +119,7 @@ class MultiDate extends Component<IMultiDate, IMultiDateExterior> implements IMu
       default:
         return (
           <div className={"multidate-container-"+s.style}>
-            <div className="multidate-title">{p.title}
+            <div className="multidate-title">{this.title.toString()}
               <span className="multidate-expandinfo">↕</span>
             </div>
             <div className="multidate-dateselected">{this.getDateTimeString()}<span className="multidate-tolerance">{this.getToleranceString()}</span></div>
