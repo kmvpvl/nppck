@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8000;
 const api = new OpenAPIBackend({ 
     definition: 'nppck.yml'
 });
-//api.init();
+api.init();
 api.register({
     factory: async (c, req, res) => {
         try {
@@ -25,6 +25,15 @@ api.register({
     order: async (c, req, res) => {
         try {
             const r = await NPPCKAPI.order(c, req, res);
+            return res.status(200).json(r);
+        }
+        catch(e) {
+            return res.status(404).json((e as Error).message);    
+        }
+    },
+    orders: async (c, req, res) => {
+        try {
+            const r = await NPPCKAPI.orders(c, req, res);
             return res.status(200).json(r);
         }
         catch(e) {

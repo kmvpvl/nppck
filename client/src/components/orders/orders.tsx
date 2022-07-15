@@ -3,6 +3,8 @@ import MLString from "../mlstring";
 import { Button, ButtonGroup, Col, Container, Form, FormCheck, FormControl, Nav, Navbar, Row } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./orders.css";
+import Order, { IOrder } from "../order/order";
+import serverFetch from "../berequest";
 
 const strFilter = new MLString({default:"Filter", values: new Map([["ru", "Фильтр"]])});
 type tsView = "list" | "boards";
@@ -29,14 +31,30 @@ const strStatusFinished = new MLString({default:"Finished", values: new Map([["r
 type tsOneManyOptions = "any" | "all";
 
 export interface IOrders{
-
+    factoryId: string
 }
 interface IOrdersState {
 
 }
 
 export default class Orders extends React.Component<IOrders, IOrdersState>{
+    private ordersContainer: any;
+    private ordersCollection: Array<IOrder>;
+    constructor(props: any){
+        super(props);
+        this.ordersCollection = new Array<IOrder>;
+    }
+    componentDidMount(){
+        serverFetch("factory/"+this.props.factoryId+"/orders")
+        .then(res=>res.json())
+        .then((result)=>{
+            console.log("orders = ", result);
+            this.ordersCollection = result;
+            this.setState({});
+        });
+    }
     render() {
+        console.log("render =", this.ordersCollection);
         return (
             <span className="orders-list">
                 <span className="orders-toolbar-container">
@@ -70,8 +88,8 @@ export default class Orders extends React.Component<IOrders, IOrdersState>{
                     </Form.Group>
                     </Row></Form>
                 </span>
-                <span className="order-list-container">
-
+                <span className="order-list-container" ref={(ref)=>this.ordersContainer = ref}>
+                    {this.ordersCollection.map((o, i)=><Order key={i} {...o}/>)}
                 </span>
             </span>
         );
