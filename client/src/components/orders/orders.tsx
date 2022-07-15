@@ -1,6 +1,6 @@
 import React from "react";
 import MLString from "../mlstring";
-import { Button, ButtonGroup, Col, Container, Form, FormCheck, FormControl, Nav, Navbar, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./orders.css";
 import Order, { IOrder } from "../order/order";
@@ -42,7 +42,7 @@ export default class Orders extends React.Component<IOrders, IOrdersState>{
     private ordersCollection: Array<IOrder>;
     constructor(props: any){
         super(props);
-        this.ordersCollection = new Array<IOrder>;
+        this.ordersCollection = new Array<IOrder>();
     }
     componentDidMount(){
         serverFetch("factory/"+this.props.factoryId+"/orders")
@@ -88,7 +88,7 @@ export default class Orders extends React.Component<IOrders, IOrdersState>{
                     </Form.Group>
                     </Row></Form>
                 </span>
-                <span className="order-list-container" ref={(ref)=>this.ordersContainer = ref}>
+                <span className="orders-list-container" ref={(ref)=>this.ordersContainer = ref}>
                     {this.ordersCollection.map((o, i)=><Order key={i} {...o}/>)}
                 </span>
             </span>

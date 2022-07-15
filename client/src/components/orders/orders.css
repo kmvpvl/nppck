@@ -1,20 +1,20 @@
 .orders-list {
     display: grid;
-    grid-template-areas: "toolbar"
-    "list";
+    grid-template-rows: auto 1fr;
     gap: 2px;
     grid-template-rows: auto 1fr;
 }
 .orders-toolbar-container {
-    grid-area: "toolbar";
     border: var(--element-border-style);
     max-width: auto;
     display: block;
 }
 
 .orders-list-container {
-    grid-area: "list";
     border: var(--element-border-style);
+    display: block;
+    flex-direction: row;
+    overflow: auto;
 }
 
 orders-boards {

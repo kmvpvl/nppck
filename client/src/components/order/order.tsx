@@ -3,8 +3,8 @@ import MultiDate, {IMultiDate, MULTIDATE_EXTERIOR_SUPERBRIEF, MULTIDATE_EXTERIOR
 import MLString, { IMLString } from "../mlstring";
 import "./order.css";
 
-const strContract: IMLString = {default: "Contract", values: new Map([["ru-ru", "Дата договора"]])};
-const strPromise: IMLString = {default: "Promise", values: new Map([["ru-ru", "Дата обещания"]])};
+const strContract: IMLString = {default: "Contract", values: new Map([["ru", "Дата договора"]])};
+const strPromise: IMLString = {default: "Promise", values: new Map([["ru", "Дата обещания"]])};
 const strContractSubtitle: IMLString = {default: "Due date by agreement", values: new Map([["ru-ru", "Дата в соответствии с договором"]])};
 
 export interface IProduct {

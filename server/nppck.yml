@@ -133,7 +133,7 @@ components:
                         oneOf:
                             - $ref: "#/components/schemas/mlstring"
                             - type: string
-        datetolerance:
+        daterange:
             type: object
             properties:
                 datepoint:
@@ -146,11 +146,17 @@ components:
             type: object
             properties:
                 estimated:
-                    $ref: "#/components/schemas/datetolerance"
+                    $ref: "#/components/schemas/daterange"
                 baseline:
-                    type: object
-                    additionalProperties:
-                        $ref: "#/components/schemas/datetolerance"
+                    type: array
+                    items:
+                        type: array
+                        items:
+                            maxItems: 2
+                            minItems: 2
+                            oneOf:
+                                - type: string
+                                - $ref: "#/components/schemas/daterange"
         orderpriority:
             type: object
             properties:
