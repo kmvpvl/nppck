@@ -1,7 +1,9 @@
 import OpenAPIBackend from 'openapi-backend';
 import express, { Application, Request, Response } from "express";
+import { IncomingHttpHeaders } from 'http2';
 import morgan from "morgan";
 import NPPCKAPI from './api';
+import User from "./model/user"
 import cors from 'cors';
 
 const PORT = process.env.PORT || 8000;
@@ -42,8 +44,19 @@ api.register({
     },
     validationFail: (c, req, res) => res.status(400).json({ err: c.validation.errors }),
     notFound: (c, req, res) => res.status(404).json({ err: 'not found' }),
+    notImplemented: (c, req, res) => res.status(500).json({ err: 'not found' }),
     postResponseHandler: (c, req, res) => {
     //    return res.status(200);
+    },
+    unauthorizedHandler: (c, req, res) => res.status(401).json({ err: 'not auth' })
+    
+});
+api.registerSecurityHandler('NPPC_AUTH', (c, ...args) => {
+    try{
+        const user = new User(args[0] as Request);
+        return true; 
+    } catch(e){
+        return false;
     }
 });
 

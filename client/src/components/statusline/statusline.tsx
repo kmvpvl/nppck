@@ -12,7 +12,8 @@ export interface IStatusLineState{
 export default class StatusLine extends React.Component<IStatusLine, IStatusLineState> {
     render(): React.ReactNode {
         return (
-            <span>StatusLine
+            <span>
+                <span>{NPPCSettings.user}</span>
                 <span className="statusline-lang">{NPPCSettings.lang}</span>
             </span>
         );

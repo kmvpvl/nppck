@@ -24,7 +24,7 @@ components:
         NPPC_AUTH:
             type: apiKey
             in: header
-            name: nppc_auth
+            name: NPPC_AUTH
     schemas:
         error:
             description: NPPC Error object

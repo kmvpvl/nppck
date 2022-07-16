@@ -18,5 +18,6 @@ export const NPPCSettings = {
     server: {
         url: DEFAULT_SETTINGS.Backend.baseURL,
     },
-    factory: DEFAULT_SETTINGS.Factory.initial
+    factory: DEFAULT_SETTINGS.Factory.initial,
+    user: "Pavel"
 }
