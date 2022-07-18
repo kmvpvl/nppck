@@ -1,11 +1,23 @@
-import { IFactory, FactorySchema, FactoryID } from "./factory";
-import { IOrder, OrderSchema } from "./order";
+import Factory, {FactoryID} from './factory';
+import Material, {MaterialID, MDMCode} from './material';
+import NPPCError from './error';
 
-type MDMCode = string;
-type ProductID = string;
+export interface IRouteTree {
 
+}
 export default class RouteTree {
-    constructor(facId: FactoryID, prodId: ProductID){
-
+    private factoryid: FactoryID;
+    private materialid: MaterialID;
+    private data?: IRouteTree;
+    constructor(factoryid: FactoryID, materialid: MaterialID | MDMCode){
+        this.factoryid = factoryid;
+        this.materialid = materialid;
+    }
+    async load(){
+        let m_top = new Material(this.factoryid, this.materialid);
+        
+    }
+    toJson():IRouteTree {
+        return {};
     }
 }

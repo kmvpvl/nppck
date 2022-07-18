@@ -1,9 +1,12 @@
 import OpenAPIBackend from 'openapi-backend';
 import express, { Application, Request, Response } from "express";
-import { IncomingHttpHeaders } from 'http2';
 import morgan from "morgan";
-import NPPCKAPI from './api';
-import User from "./model/user"
+import factory from "./api/factory";
+import material from './api/material';
+import orders from './api/orders';
+import operations from './api/operations';
+import route from './api/route';
+import User from "./model/user";
 import cors from 'cors';
 
 const PORT = process.env.PORT || 8000;
@@ -14,46 +17,19 @@ const api = new OpenAPIBackend({
 });
 api.init();
 api.register({
-    factory: async (c, req, res) => {
-        try {
-            const r = await NPPCKAPI.factory(c, req, res);
-            return res.status(200).json(r);
-        }
-        catch(e) {
-            return res.status(404).json((e as Error).message);    
-        }
-    },
-
-    order: async (c, req, res) => {
-        try {
-            const r = await NPPCKAPI.order(c, req, res);
-            return res.status(200).json(r);
-        }
-        catch(e) {
-            return res.status(404).json((e as Error).message);    
-        }
-    },
-    orders: async (c, req, res) => {
-        try {
-            const r = await NPPCKAPI.orders(c, req, res);
-            return res.status(200).json(r);
-        }
-        catch(e) {
-            return res.status(404).json((e as Error).message);    
-        }
-    },
+    factory:    async (c, req, res) => factory(c, req, res),
+    material:   async (c, req, res) => material(c, req, res),
+    route:      async (c, req, res) => route(c, req, res),
+    operations: async (c, req, res) => operations(c, req, res),
+    orders:     async (c, req, res) => orders(c, req, res),
     validationFail: (c, req, res) => res.status(400).json({ err: c.validation.errors }),
     notFound: (c, req, res) => res.status(404).json({ err: 'not found' }),
     notImplemented: (c, req, res) => res.status(500).json({ err: 'not found' }),
-    postResponseHandler: (c, req, res) => {
-    //    return res.status(200);
-    },
     unauthorizedHandler: (c, req, res) => res.status(401).json({ err: 'not auth' })
-    
 });
-api.registerSecurityHandler('NPPC_AUTH', (c, ...args) => {
+api.registerSecurityHandler('NPPC_AUTH', (c: any) => {
     try{
-        const user = new User(args[0] as Request);
+        const user = new User(c.request);
         return true; 
     } catch(e){
         return false;
@@ -67,12 +43,12 @@ app.use(morgan('tiny'));
 app.use(cors());
 
 // use as express middleware
-app.use((req: Request, res: Response) => api.handleRequest({
+app.use(async (req: Request, res: Response) => await api.handleRequest({
     method: req.method,
     path: req.path,
     body: req.body,
-    query: "",
-    headers: { }
+    query: req.query as {[key: string]: string},
+    headers: req.headers as {[key: string]: string}
   }, 
   req, res));
 app.listen(PORT, () => {

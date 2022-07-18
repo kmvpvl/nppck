@@ -1,6 +1,7 @@
 import Role, { RoleName } from "./roles";
 import express, { Application, Request, Response } from "express";
 import { Schema, connect, model } from 'mongoose';
+import { Context } from "vm";
 
 
 export interface IUserData extends Document {
@@ -14,7 +15,7 @@ export const UserSchema: Schema = new Schema({
 export default class User {
     private _userName?: string | string[];
     private data?: IUserData;
-    constructor(req: Request){
+    constructor(req: any){
         const authorization = req.headers["authorization"];
         this._userName = req.headers["nppc_auth"];
         console.log("authorization =", authorization, "; nppc_auth =", this._userName);

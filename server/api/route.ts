@@ -1,22 +1,22 @@
 import { Request, Response } from 'express';
 import { model, Schema, Model, Document, Mongoose, connect } from 'mongoose';
-import Factory, { IFactory, FactorySchema } from './../model/factory';
 import NPPCError from '../model/error';
-import User from "../model/user";
+import Material, { IMaterial } from '../model/material';
+import Route from '../model/route';
 
-export default async function factory(c: any, req: Request, res: Response) {
+export default async function material(c: any, req: Request, res: Response) {
     const factoryid = c.request.params["factoryid"];
-    console.log(`API: factory command with params: ${factoryid}`);
-    const u = new User(c.request);
+    const materialid = c.request.params["materialid"];
+    console.log(`API: route command with params: factory = ${factoryid}; material = ${materialid}`);
     try {
-        let f = new Factory(factoryid);
-        await f.load();
-        return res.status(200).json(f.toJson());
+        let r = new Route(factoryid, materialid);
+        await r.load();
+        return res.status(200).json(r.toJson());
     } catch (e: any) {
         console.error(e);
         if (e instanceof NPPCError){
             switch (e.code){
-                case "factory:notfound": 
+                case "material:notloaded": 
                     return res.status(404).json(e)
                 case "material:anotherfactory": 
                 default: return res.status(400).json(e);

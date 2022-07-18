@@ -1,4 +1,5 @@
 import { Schema, connect, model } from 'mongoose';
+import NPPCError from './error';
 export type FactoryID = string;
 export interface IFactory extends Document {
 }
@@ -6,7 +7,7 @@ export interface IFactory extends Document {
 export const FactorySchema: Schema = new Schema({
 });
 
-export class Factory {
+export default class Factory {
     private id: FactoryID;
     private data: any;
     constructor(fid: FactoryID){
@@ -14,23 +15,25 @@ export class Factory {
     }
     async load (){
         let uri = 'mongodb://0.0.0.0/NPP';
-        connect(uri, (err)=>{
-            if (err) {
-                console.error(err.message);
-                throw err;
-            }  
-            console.log('Connected to MongoDb');
+        connect(uri)
+        .catch((err)=>{
+            try {
+                throw new NPPCError("mongo:connect", `err=${err.message}; factoryid=${this.id}`)
+            } catch(e){
+                console.error(e);
+            }
         });
-        const FC = model<IFactory>('factories', FactorySchema);
-        let f = await FC.find({_id : this.id})
-          .exec()
-          .then((x)=>{
-            return x;
-          });
-        console.log(f); 
-        if (!f.length) throw new Error(`Factory id ${this.id} not found`);
-        this.data = f[0];
+        const mongoFactory = model<IFactory>('factories', FactorySchema);
+        try {
+            let f: IFactory | null = await mongoFactory.findById(this.id).lean<IFactory>();
+            this.data = f;
+            console.log("Factory from mongo =", this.data);
+        } catch(e){
+            console.error(e);
+        }
+        if (!this.data) throw new NPPCError("factory:notfound", `factoryid=${this.id}`);
     }
+
     toJson(){
         return this.data;
     }
