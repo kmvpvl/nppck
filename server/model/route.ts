@@ -1,6 +1,7 @@
 import Factory, {FactoryID} from './factory';
-import Material, {MaterialID, MDMCode} from './material';
+import Material, {IMaterial, MaterialID, MDMCode} from './material';
 import NPPCError from './error';
+import Operation, {IOperation} from './operation';
 
 export interface IRouteTree {
 
@@ -15,9 +16,11 @@ export default class RouteTree {
     }
     async load(){
         let m_top = new Material(this.factoryid, this.materialid);
-        
+        await m_top.load();
+        this.data = await m_top.route();
+        console.log(this.data);
     }
-    toJson():IRouteTree {
-        return {};
+    toJson() {
+        return this.data;
     }
 }

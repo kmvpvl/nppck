@@ -21,5 +21,5 @@ export default class NPPCError extends Error {
         this.code = code;
         this.description = this.message;
     }
-    toString(){return "TEST"}
+    toString(){return this.message}
 }

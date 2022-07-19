@@ -4,25 +4,16 @@ import Factory, { IFactory, FactorySchema } from './../model/factory';
 import NPPCError from '../model/error';
 import Operation, { IOperation, OperationSchema } from '../model/operation';
 import User from "../model/user";
+import Material from '../model/material';
 
 export default async function operations(c: any, req: Request, res: Response) {
     const factoryid = c.request.params["factoryid"];
-    const materialref = new Types.ObjectId(c.request.query["results.ref"]);
+    const materialref = c.request.query["results.ref"];
     console.log(`API: operations command with params: factoryid = ${factoryid}; materialref = ${materialref}`);
-    const u = new User(c.request);
-    let uri = 'mongodb://0.0.0.0/NPP';
-    connect(uri)
-    .catch((err)=>{
-        try {
-            throw new NPPCError("mongo:connect", `err=${err.message}; factoryid=${factoryid}`)
-        } catch(e){
-            console.error(e);
-        }
-    });
-    const mongoOperations = model<IOperation>('operations', OperationSchema);
     try {
-        let oo: IOperation[] = await mongoOperations.find({'results.ref':materialref}).exec();
-        console.log("Operations from mongo =", oo);
+        let m = new Material(factoryid, materialref);
+        await m.load();
+        let oo = await m.getOperationsByResult();
         return res.status(200).json(oo);
     } catch(e){
         console.error(e);

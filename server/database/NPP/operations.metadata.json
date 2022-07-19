@@ -1,1 +1,1 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"37bf171025894e6c83981ae38930b625","collectionName":"operations","type":"collection"}
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"cost":{"$numberInt":"1"}},"name":"cost_1","background":false}],"uuid":"37bf171025894e6c83981ae38930b625","collectionName":"operations","type":"collection"}
