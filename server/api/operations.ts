@@ -21,7 +21,7 @@ export default async function operations(c: any, req: Request, res: Response) {
     });
     const mongoOperations = model<IOperation>('operations', OperationSchema);
     try {
-        let oo: IOperation[] = await mongoOperations.find({'cost' : 2400});
+        let oo: IOperation[] = await mongoOperations.find({'results.ref':materialref}).exec();
         console.log("Operations from mongo =", oo);
         return res.status(200).json(oo);
     } catch(e){
