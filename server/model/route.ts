@@ -10,14 +10,16 @@ export default class RouteTree {
     private factoryid: FactoryID;
     private materialid: MaterialID;
     private data?: IRouteTree;
-    constructor(factoryid: FactoryID, materialid: MaterialID | MDMCode){
+    private count: number;
+    constructor(factoryid: FactoryID, materialid: MaterialID | MDMCode, count: number){
         this.factoryid = factoryid;
         this.materialid = materialid;
+        this.count = count;
     }
     async load(){
         let m_top = new Material(this.factoryid, this.materialid);
         await m_top.load();
-        this.data = await m_top.route();
+        this.data = await m_top.route(this.count);
         console.log(this.data);
     }
     toJson() {

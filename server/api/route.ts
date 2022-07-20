@@ -7,9 +7,10 @@ import RouteTree from '../model/route';
 export default async function route(c: any, req: Request, res: Response) {
     const factoryid = c.request.params["factoryid"];
     const materialid = c.request.params["materialid"];
-    console.log(`API: route command with params: factory = ${factoryid}; material = ${materialid}`);
+    const count = c.request.query["count"];
+    console.log(`API: route command with params: factory = ${factoryid}; material = ${materialid}; count = ${count}`);
     try {
-        let r = new RouteTree(factoryid, materialid);
+        let r = new RouteTree(factoryid, materialid, count);
         await r.load();
         return res.status(200).json(r.toJson());
     } catch (e: any) {

@@ -282,13 +282,20 @@ components:
             required: false
             schema:
                 type: number
-        results.ref:
+        results.materialref:
             description: Be used for operation requests
-            name: results.ref
+            name: results.materialref
             in: query
             required: false
             schema:
                 type: string
+        count:
+            description: count of Material
+            name: count
+            in: query
+            required: true
+            schema:
+                type: number
 paths:
     /factory/{factoryid}:
         get:
@@ -377,6 +384,7 @@ paths:
             parameters:
                 - $ref: "#/components/parameters/factoryid"
                 - $ref: "#/components/parameters/materialid"
+                - $ref: "#/components/parameters/count"
             responses:
                 200:
                     description: OK
@@ -396,7 +404,7 @@ paths:
             operationId: operations
             parameters:
                 - $ref: "#/components/parameters/factoryid"
-                - $ref: "#/components/parameters/results.ref"
+                - $ref: "#/components/parameters/results.materialref"
             responses:
                 200:
                     description: OK

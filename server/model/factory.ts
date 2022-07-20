@@ -1,6 +1,12 @@
 import { Schema, connect, model } from 'mongoose';
 import NPPCError from './error';
 export type FactoryID = string;
+
+export interface IMLString {
+    default: string;
+    values?: Map<string, string>
+}
+
 export interface IFactory extends Document {
 }
 

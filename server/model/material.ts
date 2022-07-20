@@ -1,6 +1,6 @@
 import { Schema, connect, model, Types } from "mongoose";
 import NPPCError from "./error";
-import { IFactory, FactorySchema, FactoryID } from "./factory";
+import { IFactory, FactorySchema, FactoryID, IMLString } from "./factory";
 import Operation, { IOperation, OperationSchema } from "./operation";
 import { IOrder, OrderSchema } from "./order";
 
@@ -8,8 +8,11 @@ export type MDMCode = string;
 export type MaterialID = string;
 
 export interface IMaterial extends Document{
-    factoryid: string;
-
+    factoryid?: string; // if undefined then any factory can use material
+    name: string | IMLString;
+    fullname: string | IMLString;
+    mdmcode: string;
+    cost: number;
 }
 export const MaterialSchema: Schema = new Schema({})
 
@@ -59,25 +62,38 @@ export default class Material {
             }
         });
         const mongoOperations = model<IOperation>('operations', OperationSchema);
-        let oo: IOperation[] = await mongoOperations.find({'results.ref': new Types.ObjectId(this.id)}).lean();
+        let oo: IOperation[] = await mongoOperations.find({'results.materialref': new Types.ObjectId(this.id)}).lean();
         //oo.forEach((o)=>o.lean<IOperation>());
         console.log("Operations from mongo =", oo);
         return oo;
     }
-    async route() {
-        let ret = {ref: this.id, name: this.data.name, routes: new Array<any>()};
+    async route(count: number = 1) {
+        let ret = {materialref: this.id, name: this.data.name, mdmcode: this.data.mdmcode, routes: new Array<any>(), count: count, stock: 0};
         let oo = await this.getOperationsByResult();
         if (!oo.length) ret.routes.push({error: `There are no operations with result as Material`});
         for (const [i, op] of Object.entries(oo)) {
             let materials: any[] = [];
             let o: Operation = new Operation(op);
+            let stock = 0;
+            let mult = 1;
+            let rcount = o.getCountMaterialResult(this.id);
+            if (!rcount) {
+                ret.routes.push({error: `Could not retrieve count of material as a result of operation`});
+                break;
+            }
+            if (rcount > count) {
+                stock = rcount - count;
+            } else {
+                mult = Math.ceil(count / rcount);
+                stock = (mult * rcount) - count;
+            }
             console.log("Searching every found operation: ", o);
             let consofs: Array<any> = o.json.consistsof as Array<any>;
             for (const [x, m] of Object.entries(consofs)){
                 try {
-                    let mat = new Material(this.factoryid, m.ref);
+                    let mat = new Material(this.factoryid, m.materialref);
                     await mat.load();
-                    let z = await mat.route();
+                    let z = await mat.route(mult * m.count);
                     materials.push(z);
                 }
                 catch (e) {
@@ -87,10 +103,11 @@ export default class Material {
             };
             ret.routes.push({
                 operation: {
-                    ref: op._id,
+                    operationref: op._id,
                     name: op.name
                 },
-                materials: materials
+                materials: materials,
+                stock: stock
             });
         }
         console.log("Routes =", ret);
