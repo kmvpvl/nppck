@@ -65,9 +65,9 @@ export default class Material {
         return oo;
     }
     async route() {
-        let ret = {material: {ref: this.id, name: this.data.name, routes: new Array<any>()}};
+        let ret = {ref: this.id, name: this.data.name, routes: new Array<any>()};
         let oo = await this.getOperationsByResult();
-        if (!oo.length) ret.material.routes.push({error: `There are no operations with result as Material`});
+        if (!oo.length) ret.routes.push({error: `There are no operations with result as Material`});
         for (const [i, op] of Object.entries(oo)) {
             let materials: any[] = [];
             let o: Operation = new Operation(op);
@@ -85,7 +85,7 @@ export default class Material {
                     materials.push({error: `${e}`});
                 }
             };
-            ret.material.routes.push({
+            ret.routes.push({
                 operation: {
                     ref: op._id,
                     name: op.name
