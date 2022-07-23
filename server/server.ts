@@ -5,7 +5,8 @@ import factory from "./api/factory";
 import material from './api/material';
 import orders from './api/orders';
 import operations from './api/operations';
-import route from './api/route';
+import material_route from './api/material_route';
+import order_route from './api/order_route';
 import User from "./model/user";
 import cors from 'cors';
 
@@ -19,7 +20,8 @@ api.init();
 api.register({
     factory:    async (c, req, res) => factory(c, req, res),
     material:   async (c, req, res) => material(c, req, res),
-    route:      async (c, req, res) => route(c, req, res),
+    material_route:      async (c, req, res) => material_route(c, req, res),
+    order_route:      async (c, req, res) => order_route(c, req, res),
     operations: async (c, req, res) => operations(c, req, res),
     orders:     async (c, req, res) => orders(c, req, res),
     validationFail: (c, req, res) => res.status(400).json({ err: c.validation.errors }),

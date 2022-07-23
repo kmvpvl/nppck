@@ -7,11 +7,10 @@ import User from "../model/user";
 import Material from '../model/material';
 
 export default async function operations(c: any, req: Request, res: Response) {
-    const factoryid = c.request.params["factoryid"];
     const materialref = c.request.query["results.materialref"];
-    console.log(`API: operations command with params: factoryid = ${factoryid}; materialref = ${materialref}`);
+    console.log(`API: operations command with params: materialref = ${materialref}`);
     try {
-        let m = new Material(factoryid, materialref);
+        let m = new Material(materialref);
         await m.load();
         let oo = await m.getOperationsByResult();
         return res.status(200).json(oo);

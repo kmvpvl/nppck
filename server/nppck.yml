@@ -296,6 +296,13 @@ components:
             required: true
             schema:
                 type: number
+        orderid:
+            description: uniq ObjectId of order
+            name: orderid
+            in: path
+            required: true
+            schema:
+                type: string
 paths:
     /factory/{factoryid}:
         get:
@@ -357,12 +364,11 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/error"
-    /factory/{factoryid}/material/{materialid}:
+    /material/{materialid}:
         get:
             description: Returns all information about material or product or semi-final by its uniq id
             operationId: material
             parameters:
-                - $ref: "#/components/parameters/factoryid"
                 - $ref: "#/components/parameters/materialid"
             responses:
                 200:
@@ -377,12 +383,11 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/error"
-    /factory/{factoryid}/material/{materialid}/route:
+    /material/{materialid}/route:
         get:
             description: Creates and returns tree of routes for material or product or semi-final by its uniq id
-            operationId: route
+            operationId: material_route
             parameters:
-                - $ref: "#/components/parameters/factoryid"
                 - $ref: "#/components/parameters/materialid"
                 - $ref: "#/components/parameters/count"
             responses:
@@ -398,12 +403,30 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/error"
-    /factory/{factoryid}/operations:
+    /order/{orderid}/route:
+        get:
+            description: Creates and returns tree of routes for all products and add routes to every products of order
+            operationId: order_route
+            parameters:
+                - $ref: "#/components/parameters/orderid"
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/order'
+                400:
+                    description: Factory not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/error"
+    /operations:
         get:
             description: Returns all operations of factory
             operationId: operations
             parameters:
-                - $ref: "#/components/parameters/factoryid"
                 - $ref: "#/components/parameters/results.materialref"
             responses:
                 200:

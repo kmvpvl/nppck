@@ -4,13 +4,12 @@ import NPPCError from '../model/error';
 import Material, { IMaterial } from '../model/material';
 import RouteTree from '../model/route';
 
-export default async function route(c: any, req: Request, res: Response) {
-    const factoryid = c.request.params["factoryid"];
+export default async function material_route(c: any, req: Request, res: Response) {
     const materialid = c.request.params["materialid"];
     const count = c.request.query["count"];
-    console.log(`API: route command with params: factory = ${factoryid}; material = ${materialid}; count = ${count}`);
+    console.log(`API: route material command with params: material = ${materialid}; count = ${count}`);
     try {
-        let r = new RouteTree(factoryid, materialid, count);
+        let r = new RouteTree(materialid, count);
         await r.load();
         return res.status(200).json(r.toJson());
     } catch (e: any) {

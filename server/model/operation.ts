@@ -27,14 +27,14 @@ export const OperationSchema: Schema = new Schema({
 });
 
 export default class Operation {
-    private id: string;
+    private id: Types.ObjectId;
     private data?: IOperation;
-    constructor(id: string | IOperation){
-        if (id instanceof Object) {
-            this.id = id._id;
-            this.data = id;
-        } else {
+    constructor(id: Types.ObjectId | IOperation){
+        if (id instanceof Types.ObjectId) {
             this.id = id;
+        } else {
+            this.id = new Types.ObjectId(id._id);
+            this.data = id;
         }
     }
     async load() {
@@ -46,10 +46,10 @@ export default class Operation {
     set preLoadedData(v: any) {
         this.data = v;
     }
-    getCountMaterialResult(materialId: string): number | undefined {
+    getCountMaterialResult(materialId: Types.ObjectId): number | undefined {
         if (this.data) {
             for (const [i, r] of Object.entries(this.data.results)){
-                if (r.materialref.toString() == materialId) return r.count;
+                if (r.materialref.toString() == materialId.toString()) return r.count;
             }
             return undefined;
         } else {

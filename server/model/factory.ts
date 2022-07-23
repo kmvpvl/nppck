@@ -1,10 +1,24 @@
-import { Schema, connect, model } from 'mongoose';
+import { Schema, connect, model, Types } from 'mongoose';
 import NPPCError from './error';
-export type FactoryID = string;
+
+export interface IDateRange {
+    datepoint: Date;
+    tolerance?: {
+      left?: number;
+      right?: number;
+    }
+}
 
 export interface IMLString {
     default: string;
     values?: Map<string, string>
+}
+
+export interface IMultiDate {
+    title?: IMLString;
+    subtitle?: IMLString;
+    estimated: IDateRange
+    baseline?: Map<string, IDateRange>;
 }
 
 export interface IFactory extends Document {
@@ -14,9 +28,9 @@ export const FactorySchema: Schema = new Schema({
 });
 
 export default class Factory {
-    private id: FactoryID;
+    private id: Types.ObjectId;
     private data: any;
-    constructor(fid: FactoryID){
+    constructor(fid: Types.ObjectId){
         this.id = fid;
     }
     async load (){

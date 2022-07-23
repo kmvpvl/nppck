@@ -8,7 +8,7 @@ const strPromise: IMLString = {default: "Promise", values: new Map([["ru", "Да
 const strContractSubtitle: IMLString = {default: "Due date by agreement", values: new Map([["ru-ru", "Дата в соответствии с договором"]])};
 
 export interface IProduct {
-    id?: string;
+    materialref: string;
     mdmCode: string;
     name: MLString;
     fullname?: MLString;
