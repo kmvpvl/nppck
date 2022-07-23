@@ -25,7 +25,7 @@ export default class NPPCError extends Error {
             ["order:notfound", "Order not found"],
             ["order:notloaded", "Order not loaded from DB. Try to use 'load' method before"],
         ]);
-        super(`${code}: ${descs.get(code)} - ${description}`);
+        super(`${descs.get(code)} - ${description}`);
         this.code = code;
         this.description = this.message;
     }

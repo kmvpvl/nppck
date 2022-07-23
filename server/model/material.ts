@@ -65,7 +65,7 @@ export default class Material {
     async route(count: number = 1) {
         let ret = {materialref: this.id, name: this.data.name, mdmcode: this.data.mdmcode, routes: new Array<any>(), count: count, routematerialid: new Types.ObjectId()};
         let oo = await this.getOperationsByResult();
-        if (!oo.length) throw new NPPCError("material:notrouted:nooperation", `id = ${this.id}; ret = ${ret}`);
+        if (!oo.length) throw new NPPCError("material:notrouted:nooperation", `materialid = ${this.id}; name = ${this.data?.name}`);
         for (const [i, op] of Object.entries(oo)) {
             let materials: any[] = [];
             let o: Operation = new Operation(op);

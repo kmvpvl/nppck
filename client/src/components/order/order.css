@@ -1,6 +1,7 @@
 .order-container {
     border: var(--element-border-style);
     display: grid;
+    position: relative;
     grid-template-areas: 
     "order-number   order-number    order-contract order-promise"
     "order-priority order-customer  order-contract order-promise"
@@ -11,7 +12,26 @@
     padding: 2px;
     gap: 2px;
 }
-
+.order-toolbar{
+    display: inline-block;
+    position: absolute;
+    opacity: 0.9;
+    transition: left .75s;
+    left:-100vw;
+    overflow: hidden;
+}
+.order-error-container{
+    display: block;
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    left: 0;
+    margin-left: auto; 
+    margin-right: auto; 
+}
+.order-toolbar.show{
+    left: 0;
+}
 .order-products {
     grid-area: order-products;
     display: grid;
@@ -38,6 +58,7 @@
     font-size: x-large;
     font-weight: bold;
     grid-area: order-number;
+    cursor: pointer;
 }
 .order-contract {
     grid-area: order-contract;

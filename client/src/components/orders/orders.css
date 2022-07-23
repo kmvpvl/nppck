@@ -1,8 +1,9 @@
 .orders-list {
     display: grid;
-    grid-template-rows: auto 1fr;
     gap: 2px;
     grid-template-rows: auto 1fr;
+    max-height: 100%;
+    overflow: hidden;
 }
 .orders-toolbar-container {
     border: var(--element-border-style);
@@ -15,6 +16,7 @@
     display: block;
     flex-direction: row;
     overflow: auto;
+    max-height: 100%;
 }
 
 orders-boards {

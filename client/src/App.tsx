@@ -29,7 +29,7 @@ export default class NPPCApp extends React.Component<INPPCApp, INPPCAppState> {
   
   private menuChoosen = (e: any)=>{
     console.log("Menu choosen:", e.target.hash, "; current chapter:", this.curChapter, "; window.location.hash", window.location.hash);
-    if (e.target.hash != window.location.hash) {
+    if (e.target.hash !== window.location.hash) {
       this.curChapter = e.target.hash;
       this.setState({});
     }
